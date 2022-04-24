@@ -1,0 +1,40 @@
+echo "Running \033[00;34m${HOME}/.zshrc\033[0m"
+
+# assumes this code is run from ~/.dotfiles
+APPS=$HOME/.dotfiles/apps
+
+# your project folder that we can `p [tab]` to
+export PROJECTS=~/Documents/Code
+
+# TODO: Stash your environment variables in ~/.localrc. This means they'll stay out
+# of your main dotfiles repository, but
+# you'll have access to them in your scripts.
+# if [[ -a ~/.localrc ]]
+# then
+#  source ~/.localrc
+# fi
+
+# load the path files
+for file in $(find $APPS -name "path.zsh")
+do
+  echo "› \033[00;34m${file}\033[0m"
+  zsh $file
+done
+
+# load everything except the install, path and completion files
+for file in $(find $APPS -name "*.zsh" -not -name "install.zsh" -not -name "path.zsh" -not -name "completion.zsh")
+do
+  echo "› \033[00;34m${file}\033[0m"
+  zsh $file
+done
+
+# initialize autocomplete here, otherwise functions won't be loaded
+autoload -U compinit
+compinit
+
+# load every completion after autocomplete loads
+for file in $(find $APPS -name "completion.zsh")
+do
+  echo "› \033[00;34m${file}\033[0m"
+  zsh $file
+done

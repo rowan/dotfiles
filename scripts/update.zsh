@@ -2,11 +2,14 @@
 
 SCRIPTS=$DOTFILES/scripts
 
+# if there is an error then stop immediately
+set -e
+
 # confirm install.zsh has been run previously, and terminal has been restared
 echo "▶️  Check env variables"
 if export | grep DOTFILES
 then
-  echo "✔️ found"
+  echo "Done"
 else
   echo "🛑 \033[0;31mPlease run scripts/install.zsh first\033[0m"
   exit 1
@@ -17,4 +20,13 @@ echo "▶️  Setup macOS defaults"
 source "$SCRIPTS/macos-defaults.zsh"
 echo "Done"
 
+# run brew bundle
+echo "▶️  Run homebrew"
+echo "› \033[00;34mbrew update\033[0m"
+brew update
+echo "› \033[00;34mbrew bundle\033[0m"
+brew bundle --file $DOTFILES/homebrew/Brewfile --mas
+echo "Done"
 
+# and... we're done!
+echo "✅ All up-to-date"

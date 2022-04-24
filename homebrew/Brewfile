@@ -1,0 +1,48 @@
+cask_args appdir: '/Applications'
+
+tap 'homebrew/bundle'
+
+brew 'ack'
+brew 'cocoapods'
+brew 'coreutils'
+brew 'gh'
+brew 'go'
+brew 'grc'
+brew 'guetzli'
+brew 'hugo'
+brew 'influxdb'
+brew 'jq'
+brew 'openssl'
+brew 'mas'
+brew 'node'
+brew 'postgresql'
+brew 'readline'
+brew 'ruby-build'
+brew 'rbenv'
+brew 'unar'
+brew 'vips'
+brew 'wget'
+brew 'yarn'
+brew 'yt-dlp'
+
+cask '1password'
+cask 'asana'
+cask 'docker'
+cask 'dropbox'
+cask 'github'
+cask 'google-chrome'
+#TODO: cask 'launchcontrol'
+cask 'notion'
+cask 'pastebot'
+cask 'paw'
+cask 'sketch'
+# cask 'slack' - this now installed from Mac App Store
+cask 'vlc'
+cask 'visual-studio-code'
+
+mas "1Blocker", id: 1365531024
+mas "Postico", id: 1031280567
+mas "DaisyDisk", id: 411643860
+mas "XCode", id: 497799835
+mas "Slack for Desktop", id: 803453959
+mas "Bumpr", id: 1166066070

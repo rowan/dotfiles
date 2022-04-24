@@ -22,5 +22,13 @@ source "$SCRIPTS/gitconfig.zsh"
 echo "▶️  Install symlinks"
 source "$SCRIPTS/symlinks.zsh"
 
+# install homebrew (even if it already exists)
+# this also installs xcode command line tools (which are needed to install many apps via brew)
+echo "▶️  Install homebrew"
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
+
 # run the update script
 source "$SCRIPTS/update.zsh"

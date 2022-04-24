@@ -2,4 +2,4 @@
 *~
 *.swp
 /apps/git/gitconfig.local.symlink
-/homebrew/Brewfile.lock.json
+/apps/homebrew/Brewfile.lock.json

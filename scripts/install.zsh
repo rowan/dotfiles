@@ -11,7 +11,7 @@ set -e
 # ask for git credentials
 # update the templated gitconfig files with these credentials
 echo "▶️  Setup gitconfig"
-echo "🛑 \033[0;31mTO BE COMPLETED\033[0m"
+source "$SCRIPTS/gitconfig.zsh"
 
 # setup all of the symlinks
 # first, remove the existing symlinks, so this is repeatable

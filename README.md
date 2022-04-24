@@ -26,6 +26,8 @@ This:
 - Runs **app/\*\*/\*.zsh** scripts (excluding **app/\*\*/install.zsh** scripts)
 - Runs **app/\*\*/path.zsh** scripts _first_ (to setup `$PATH` or similar)
 - Runs **app/\*\*/completion.zsh** scripts _last_ (to setup autocompletes)
+- Updates shell to `zsh`
+- Installs `homebrew`
 
 Finally, setup the various apps and tools that are installed.
 
@@ -48,6 +50,7 @@ This:
 - Sets macOS defaults
 - Runs **homebrew** (including Mac App Store usung `mas`)
 - Runs **app/\*\*/install.zsh** scripts
+- Updates macOS
 
 ---
 

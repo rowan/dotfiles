@@ -38,5 +38,9 @@ do
 done
 echo "Done"
 
+# run macOS updates
+echo "▶️  Update macOS"
+sudo softwareupdate -i -a
+
 # and... we're done!
 echo "✅ All up-to-date"

@@ -23,9 +23,9 @@ This:
 - Updates macOS
 - Adds **bin/** files to `$PATH`
 - Symlinks **app/\*.symlink** files to `$HOME`
-- Runs **app/\*.zsh** scripts (excluding **app/install.zsh** scripts)
-- Runs **app/path.zsh** scripts _first_ (to setup `$PATH` or similar)
-- Runs **app/completion.zsh** scripts _last_ (to setup autocompletes)
+- Runs **app/\*\*/\*.zsh** scripts (excluding **app/\*\*/install.zsh** scripts)
+- Runs **app/\*\*/path.zsh** scripts _first_ (to setup `$PATH` or similar)
+- Runs **app/\*\*/completion.zsh** scripts _last_ (to setup autocompletes)
 
 Finally, setup the various apps and tools that are installed.
 
@@ -42,3 +42,13 @@ Use the **dot** command:
 This uses the **update** script:
 
 `scripts/update.zsh`
+
+This:
+
+- Sets macOS defaults
+- Runs **homebrew** (including Mac App Store usung `mas`)
+- Runs **app/\*\*/install.zsh** scripts
+
+---
+
+Inspired by: https://github.com/holman/dotfiles

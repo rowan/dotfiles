@@ -22,6 +22,11 @@ source "$SCRIPTS/gitconfig.zsh"
 echo "▶️  Install symlinks"
 source "$SCRIPTS/symlinks.zsh"
 
+# use zsh as shell
+echo "▶️  Switch shell to zsh"
+chsh -s $(which zsh)
+source ~/.zshrc
+
 # install homebrew (even if it already exists)
 # this also installs xcode command line tools (which are needed to install many apps via brew)
 echo "▶️  Install homebrew"

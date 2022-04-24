@@ -1,7 +1,9 @@
 echo "Running \033[00;34m${HOME}/.zshrc\033[0m"
 
 # assumes this code is run from ~/.dotfiles
-APPS=$HOME/.dotfiles/apps
+export DOTFILES=$HOME/.dotfiles
+
+APPS=$DOTFILES/apps
 
 # your project folder that we can `p [tab]` to
 export PROJECTS=~/Documents/Code
@@ -18,14 +20,14 @@ export PROJECTS=~/Documents/Code
 for file in $(find $APPS -name "path.zsh")
 do
   echo "› \033[00;34m${file}\033[0m"
-  zsh $file
+  source $file
 done
 
 # load everything except the install, path and completion files
 for file in $(find $APPS -name "*.zsh" -not -name "install.zsh" -not -name "path.zsh" -not -name "completion.zsh")
 do
   echo "› \033[00;34m${file}\033[0m"
-  zsh $file
+  source $file
 done
 
 # initialize autocomplete here, otherwise functions won't be loaded
@@ -36,5 +38,5 @@ compinit
 for file in $(find $APPS -name "completion.zsh")
 do
   echo "› \033[00;34m${file}\033[0m"
-  zsh $file
+  source $file
 done

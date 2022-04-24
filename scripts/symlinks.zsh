@@ -1,7 +1,6 @@
 # updates symlinks in $HOME directory
 
-# assumes this code is run from ~/.dotfiles
-APPS=$HOME/.dotfiles/apps
+APPS=$DOTFILES/apps
 
 for file in $(find -H $APPS -name "*.symlink")
 do

@@ -1,0 +1,44 @@
+#!/bin/zsh
+#
+# dot
+#
+# `dot` is a shortcut for dotfiles update.zsh script.
+# Run it periodically to ensure everything is up-do-date
+
+set -e
+
+parentDirectory="$(cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd -P)"
+dotfilesDirectory="$(cd "$( dirname "$parentDirectory" )" && pwd -P)"
+
+display_help() {
+	echo "dot -- dotfiles management"
+	echo ""
+	echo "Usage: dot [options]"
+	echo ""
+	echo "Options:"
+	echo "  -e, --edit    Open dotfiles directory for editing"
+	echo "  -h, --help    Show this help message and exit"
+	exit
+}
+
+# If there is a parameter passed open files for editing or show help text
+while test $# -gt 0; do
+	case "$1" in
+		"-h"|"--help")
+			display_help
+			;;
+		"-e"|"--edit")
+			exec "$EDITOR" "$DOTFILES"
+			exit
+			;;
+		*)
+			echo "Invalid option: $1"
+			display_help
+			;;
+	esac
+	shift
+done
+
+# Otherwise, let's update...
+echo $dotfilesDirectory
+zsh $DOTFILES/scripts/update.zsh

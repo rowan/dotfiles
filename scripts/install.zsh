@@ -1,7 +1,9 @@
 # install a new environment
 
 # assumes this code is run from ~/.dotfiles
-SCRIPTS=$HOME/.dotfiles/scripts
+export DOTFILES=$HOME/.dotfiles
+
+SCRIPTS=$DOTFILES/scripts
 
 # if there is an error then stop immediately
 set -e

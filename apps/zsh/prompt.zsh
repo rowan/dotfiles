@@ -38,7 +38,7 @@ need_push () {
     then
       echo " "
     else
-      echo " with %{$fg_bold[magenta]%}$number commits%{$reset_color%}"
+      echo " with %{$fg_bold[magenta]%}$number to push%{$reset_color%}"
     fi
   fi
 }

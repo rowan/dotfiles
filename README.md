@@ -20,11 +20,12 @@ Then, run **install**:
 
 This:
 
-<!-- - All **bin/** files are added to `$PATH` -->
-- Any **app/\*.symlink** files are symlinked to `$HOME`
-- Any **app/\*.zsh** files are loaded into the environment (excluding **app/install.zsh** files)
-- Any **app/path.zsh** files are loaded _first_ and setup `$PATH` or similar
-- Any **app/completion.zsh** files are loaded _last_ and setup autocompletes
+- Updates macOS
+- Adds **bin/** files to `$PATH`
+- Symlinks **app/\*.symlink** files to `$HOME`
+- Runs **app/\*.zsh** scripts (excluding **app/install.zsh** scripts)
+- Runs **app/path.zsh** scripts _first_ (to setup `$PATH` or similar)
+- Runs **app/completion.zsh** scripts _last_ (to setup autocompletes)
 
 Finally, setup the various apps and tools that are installed.
 

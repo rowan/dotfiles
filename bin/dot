@@ -7,9 +7,6 @@
 
 set -e
 
-parentDirectory="$(cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd -P)"
-dotfilesDirectory="$(cd "$( dirname "$parentDirectory" )" && pwd -P)"
-
 display_help() {
 	echo "dot -- dotfiles management"
 	echo ""
@@ -40,5 +37,4 @@ while test $# -gt 0; do
 done
 
 # Otherwise, let's update...
-echo $dotfilesDirectory
 zsh $DOTFILES/scripts/update.zsh

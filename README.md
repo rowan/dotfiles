@@ -28,6 +28,7 @@ This:
 - Runs **app/\*\*/completion.zsh** scripts _last_ (to setup autocompletes)
 - Updates shell to `zsh`
 - Installs `homebrew`
+- Runs the **update** script - see below
 
 Finally, setup the various apps and tools that are installed.
 

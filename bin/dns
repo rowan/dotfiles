@@ -1,0 +1,12 @@
+#!/bin/sh
+#
+# dns 
+# 
+# Quick shortcut to dig ns - which I always forget.
+#
+# USAGE:
+#
+#   $ dns $1
+#   # => runs dig ns for the given domain name
+#
+exec dig ns $1

@@ -26,7 +26,7 @@ echo "▶️  Run homebrew"
 echo "› \033[00;34mbrew update\033[0m"
 brew update
 echo "› \033[00;34mbrew bundle\033[0m"
-# brew bundle --file $DOTFILES/apps/homebrew/Brewfile --mas
+brew bundle --file $DOTFILES/apps/homebrew/Brewfile --mas
 echo "Done"
 
 # run install scripts

@@ -55,4 +55,9 @@ This:
 
 ---
 
+To investigate:
+- [`apply-user-defaults`](https://github.com/zero-sh/apply-user-defaults)
+- https://github.com/mathiasbynens/dotfiles/blob/main/.macos
+---
+
 Inspired by: https://github.com/holman/dotfiles

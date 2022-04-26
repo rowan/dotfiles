@@ -12,7 +12,7 @@ if export | grep DOTFILES
 then
   echo "Done"
 else
-  echo "🛑 \033[0;31mPlease run scripts/install.zsh first\033[0m"
+  echo "🛑 \033[0;31mPlease run scripts/install.zsh and restart the terminal first\033[0m"
   exit 1
 fi
 
@@ -27,6 +27,7 @@ echo "› \033[00;34mbrew update\033[0m"
 brew update
 echo "› \033[00;34mbrew bundle\033[0m"
 brew bundle --file $DOTFILES/apps/homebrew/Brewfile --mas
+sudo xcodebuild -license accept
 echo "Done"
 
 # run install scripts

@@ -1,0 +1,11 @@
+To backup:
+influx backup -compression gzip ./ -t 0AoVHy3Xld8N288jgNkNamMXMn1_NNYQRCMI7x0NsUDJKQu4ftQ3B4KeEXtHkZyM6M0LMdvFKTU8wz-yxhB3ug==
+
+(this creates a backup in the current working directory)
+
+To restore:
+influx restore ./ -t 0AoVHy3Xld8N288jgNkNamMXMn1_NNYQRCMI7x0NsUDJKQu4ftQ3B4KeEXtHkZyM6M0LMdvFKTU8wz-yxhB3ug== -full
+
+(this assumes the backup files are in the current working directory)
+
+Note: requires an API token 

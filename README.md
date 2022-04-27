@@ -9,14 +9,13 @@ To install these dotfiles on a new environment:
 First, clone the repository:
 
 ```
-zsh
 git clone https://github.com/rowan/dotfiles.git ~/.dotfiles
 cd ~/.dotfiles
 ```
 
 Then, run **install**:
 
-`scripts/install.zsh`
+`zsh scripts/install.zsh`
 
 This:
 
@@ -58,6 +57,12 @@ This:
 To investigate:
 - [`apply-user-defaults`](https://github.com/zero-sh/apply-user-defaults)
 - https://github.com/mathiasbynens/dotfiles/blob/main/.macos
+
+Broken:
+- XCode command line tools need to be installed to run git the first time
+- Terminal colours are borked
+- Update.zsh needs to stop and prompt for terminal restart rather than just running update script
+
 ---
 
 Inspired by: https://github.com/holman/dotfiles

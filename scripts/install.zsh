@@ -34,6 +34,5 @@ echo "▶️  Install homebrew"
 echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
-
-# run the update script
-source "$SCRIPTS/update.zsh"
+# prompt to reboot terminal and run update scripts
+echo "✅ Initial install complete - please restart terminal and run 'source scripts/update.zsh'"

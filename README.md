@@ -6,16 +6,15 @@ Scripts to install and update a development environment.
 
 To install these dotfiles on a new environment:
 
-First, clone the repository:
+1. Install XCode Command Line Tools
+`xcode-select --install`
 
-```
-git clone https://github.com/rowan/dotfiles.git ~/.dotfiles
-cd ~/.dotfiles
-```
+2. Clone the repository:
+`git clone https://github.com/rowan/dotfiles.git ~/.dotfiles`
 
-Then, run **install**:
-
-`zsh scripts/install.zsh`
+3. Then, run **install**:
+`cd ~/.dotfiles`
+`source scripts/install.zsh`
 
 This:
 
@@ -60,8 +59,16 @@ To investigate:
 
 Broken:
 - XCode command line tools need to be installed to run git the first time
+- Need to accept XCode license
+`sudo xcodebuild -license`
 - Terminal colours are borked
 - Update.zsh needs to stop and prompt for terminal restart rather than just running update script
+
+- Bunch of Apple errors related to XCode tools being installed in two locations???
+`Class AppleTypeCRetimerRestoreInfoHelper is implemented in both /usr/lib/libauthinstall.dylib (0x1ed579eb0) and /Library/Apple/System/Library/PrivateFrameworks/MobileDevice.framework/Versions/A/MobileDevice (0x10a5b84f8)`
+https://developer.apple.com/forums/thread/698628
+https://developer.apple.com/forums/thread/670389
+
 
 ---
 

@@ -36,28 +36,24 @@ done
 # see: https://github.com/tomislav/osx-terminal.app-colors-solarized
 
 # remove any existing defaults
-if test (/usr/libexec/PlistBuddy -c "Print ':Window Settings:Solarized Light'" ~/Library/Preferences/com.apple.Terminal.plist)
-then
-  echo "found Solarized light"
-fi
-# /usr/libexec/PlistBuddy -c "Delete :Window\ Settings:Solarized\ Light" ~/Library/Preferences/com.apple.Terminal.plist
-# /usr/libexec/PlistBuddy -c "Delete :Window\ Settings:Solarized\ Dark" ~/Library/Preferences/com.apple.Terminal.plist
+/usr/libexec/PlistBuddy -c "Delete :Window\ Settings:Solarized\ Light" ~/Library/Preferences/com.apple.Terminal.plist
+/usr/libexec/PlistBuddy -c "Delete :Window\ Settings:Solarized\ Dark" ~/Library/Preferences/com.apple.Terminal.plist
 
-# # add new defaults
-# cp $DOTFILES/apps/terminal/Solarized\ Light.terminal light-theme.plist
-# /usr/libexec/PlistBuddy -c "Add ':Window Settings:Solarized Light' dict" ~/Library/Preferences/com.apple.Terminal.plist
-# /usr/libexec/PlistBuddy -c "Merge 'light-theme.plist' ':Window Settings:Solarized Light'" ~/Library/Preferences/com.apple.Terminal.plist
-# rm light-theme.plist
-# echo "Added \033[00;34mSolarized Light\033[0m theme"
+# add new defaults
+cp $DOTFILES/apps/terminal/Solarized\ Light.terminal light-theme.plist
+/usr/libexec/PlistBuddy -c "Add ':Window Settings:Solarized Light' dict" ~/Library/Preferences/com.apple.Terminal.plist
+/usr/libexec/PlistBuddy -c "Merge 'light-theme.plist' ':Window Settings:Solarized Light'" ~/Library/Preferences/com.apple.Terminal.plist
+rm light-theme.plist
+echo "Added \033[00;34mSolarized Light\033[0m theme"
 
-# cp $DOTFILES/apps/terminal/Solarized\ Dark.terminal dark-theme.plist
-# /usr/libexec/PlistBuddy -c "Add ':Window Settings:Solarized Dark' dict" ~/Library/Preferences/com.apple.Terminal.plist
-# /usr/libexec/PlistBuddy -c "Merge 'dark-theme.plist' ':Window Settings:Solarized Dark'" ~/Library/Preferences/com.apple.Terminal.plist
-# rm dark-theme.plist
-# echo "Added \033[00;34mSolarized Dark\033[0m theme"
+cp $DOTFILES/apps/terminal/Solarized\ Dark.terminal dark-theme.plist
+/usr/libexec/PlistBuddy -c "Add ':Window Settings:Solarized Dark' dict" ~/Library/Preferences/com.apple.Terminal.plist
+/usr/libexec/PlistBuddy -c "Merge 'dark-theme.plist' ':Window Settings:Solarized Dark'" ~/Library/Preferences/com.apple.Terminal.plist
+rm dark-theme.plist
+echo "Added \033[00;34mSolarized Dark\033[0m theme"
 
-# # set default theme
-# defaults write com.apple.terminal "Default Window Settings" -string "Solarized Dark"
-# defaults write com.apple.Terminal "Startup Window Settings" -string "Solarized Dark"
-# echo "Set \033[00;34mSolarized Dark\033[0m to be default theme"
-# echo "Please restart the terminal to apply this theme"
+# set default theme
+defaults write com.apple.terminal "Default Window Settings" -string "Solarized Dark"
+defaults write com.apple.Terminal "Startup Window Settings" -string "Solarized Dark"
+echo "Set \033[00;34mSolarized Dark\033[0m to be default theme"
+echo "Please restart the terminal to apply this theme"

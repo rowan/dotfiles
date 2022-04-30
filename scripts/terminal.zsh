@@ -2,17 +2,17 @@
 
 GIT=$DOTFILES/apps/git
 
-# remove the existing file, so this is repeatable
-rm -f $GIT/gitconfig.symlink
+# remove the existing files, so this is repeatable
+rm -f $GIT/gitconfig.local.symlink
 
 # ask for github user details
 vared -c -p "✋ What is your github account username? " git_authorname
 vared -c -p "✋ What is your github account email? " git_authoremail
 
 # create the symlink from the example file
-sed -e "s/AUTHORNAME/$git_authorname/g" -e "s/AUTHOREMAIL/$git_authoremail/g" $GIT/gitconfig.symlink.example > $GIT/gitconfig.symlink
+sed -e "s/AUTHORNAME/$git_authorname/g" -e "s/AUTHOREMAIL/$git_authoremail/g" $GIT/gitconfig.local.symlink.template > $GIT/gitconfig.local.symlink
 
-echo "Created \033[00;34m${GIT}/gitconfig.symlink\033[0m"
+echo "Created \033[00;34m${GIT}/gitconfig.local.symlink\033[0m"
 
 # update symlinks in $HOME directory
 # first, remove the existing symlinks, so this is repeatable

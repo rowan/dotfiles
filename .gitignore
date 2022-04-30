@@ -1,5 +1,5 @@
 .DS_Store
 *~
 *.swp
-/apps/git/gitconfig.local.symlink
+/apps/git/gitconfig.symlink
 /apps/homebrew/Brewfile.lock.json

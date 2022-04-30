@@ -7,6 +7,7 @@ Scripts to install and update a development environment.
 To install these dotfiles on a new environment:
 
 1. Install XCode Command Line Tools
+`xcode-select --version` shows the currently installed version
 `xcode-select --install`
 
 2. Clone the repository:
@@ -17,20 +18,17 @@ To install these dotfiles on a new environment:
 `source scripts/install.zsh`
 
 This:
+- Creates a `$DOTFILES` environment variable
+- Configures terminal (see: `/scripts/terminal.zsh`)
+- Installs homebrew (see: `/scripts/homebrew.zsh`)
 
-- Updates macOS
-- Adds **bin/** files to `$PATH`
+The terminal configuration:
+- Adds **bin/** files to `$PATH` (see: `/apps/system/path.zsh`)
 - Symlinks **app/\*.symlink** files to `$HOME`
-- Runs **app/\*\*/\*.zsh** scripts (excluding **app/\*\*/install.zsh** scripts)
-- Runs **app/\*\*/path.zsh** scripts _first_ (to setup `$PATH` or similar)
-- Runs **app/\*\*/completion.zsh** scripts _last_ (to setup autocompletes)
-- Updates shell to `zsh`
-- Installs `homebrew`
-- Runs the **update** script - see below
-
-Finally, setup the various apps and tools that are installed.
-
-_TO BE COMPLETED_
+- Runs **app/\*\*/\*.zsh** scripts in order (see `/apps/termainal/zshrc.symlink` for details):
+    - First, runs **app/\*\*/path.zsh** scripts (to setup `$PATH` or similar)
+    - Then, runs all other **app/\*\*/\*.zsh** scripts (excluding **install.zsh** or **completion.zsh**)
+    - Finally, runs **app/\*\*/completion.zsh** scripts (to setup autocompletes)
 
 ## update 
 
@@ -58,12 +56,8 @@ To investigate:
 - https://github.com/mathiasbynens/dotfiles/blob/main/.macos
 
 Broken:
-- XCode command line tools need to be installed to run git the first time
 - Need to accept XCode license
 `sudo xcodebuild -license`
-- Terminal colours are borked
-- Update.zsh needs to stop and prompt for terminal restart rather than just running update script
-
 - Bunch of Apple errors related to XCode tools being installed in two locations???
 `Class AppleTypeCRetimerRestoreInfoHelper is implemented in both /usr/lib/libauthinstall.dylib (0x1ed579eb0) and /Library/Apple/System/Library/PrivateFrameworks/MobileDevice.framework/Versions/A/MobileDevice (0x10a5b84f8)`
 https://developer.apple.com/forums/thread/698628

@@ -7,7 +7,7 @@ SCRIPTS=$DOTFILES/scripts
 set -e
 
 # confirm install.zsh has been run previously, and terminal has been restared
-echo "▶️  Check env variables"
+echo "▶️  Confirm install"
 if export | grep DOTFILES
 then
   echo "Done"
@@ -22,12 +22,12 @@ source "$SCRIPTS/macos-defaults.zsh"
 echo "Done"
 
 # run brew bundle
-echo "▶️  Run homebrew"
+echo "▶️  Update homebrew"
 echo "› \033[00;34mbrew update\033[0m"
 brew update
 echo "› \033[00;34mbrew bundle\033[0m"
 brew bundle --file $DOTFILES/apps/homebrew/Brewfile --mas
-sudo xcodebuild -license accept
+# sudo xcodebuild -license accept
 echo "Done"
 
 # run install scripts

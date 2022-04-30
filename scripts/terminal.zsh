@@ -37,14 +37,12 @@ done
 
 # remove any existing defaults
 val=$(/usr/libexec/PlistBuddy -c "Print :Window\ Settings:Solarized\ Light" ~/Library/Preferences/com.apple.Terminal.plist 2>/dev/null)
-exitCode=$?
-if ((exitCode == 0))
+if [[ $? == 0 ]]
 then
   /usr/libexec/PlistBuddy -c "Delete :Window\ Settings:Solarized\ Light" ~/Library/Preferences/com.apple.Terminal.plist
 fi
 val=$(/usr/libexec/PlistBuddy -c "Print :Window\ Settings:Solarized\ Dark" ~/Library/Preferences/com.apple.Terminal.plist 2>/dev/null)
-exitCode=$?
-if ((exitCode == 0))
+if [[ $? == 0 ]]
 then
   /usr/libexec/PlistBuddy -c "Delete :Window\ Settings:Solarized\ Dark" ~/Library/Preferences/com.apple.Terminal.plist
 fi

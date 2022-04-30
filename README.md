@@ -7,7 +7,6 @@ Scripts to install and update a development environment.
 To install these dotfiles on a new environment:
 
 1. Install XCode Command Line Tools
-`xcode-select --version` shows the currently installed version
 `xcode-select --install`
 
 2. Clone the repository:

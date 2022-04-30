@@ -36,8 +36,8 @@ done
 # see: https://github.com/tomislav/osx-terminal.app-colors-solarized
 
 # remove any existing defaults
-/usr/libexec/PlistBuddy -c "Delete :Window\ Settings:Solarized\ Light" ~/Library/Preferences/com.apple.Terminal.plist
-/usr/libexec/PlistBuddy -c "Delete :Window\ Settings:Solarized\ Dark" ~/Library/Preferences/com.apple.Terminal.plist
+# /usr/libexec/PlistBuddy -c "Delete :Window\ Settings:Solarized\ Light" ~/Library/Preferences/com.apple.Terminal.plist
+# /usr/libexec/PlistBuddy -c "Delete :Window\ Settings:Solarized\ Dark" ~/Library/Preferences/com.apple.Terminal.plist
 
 # add new defaults
 cp $DOTFILES/apps/terminal/Solarized\ Light.terminal light-theme.plist

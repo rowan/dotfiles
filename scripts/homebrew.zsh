@@ -1,5 +1,4 @@
-which -s brew
-if (( $? != 0 ))
+if (( command -v brew == "" ))
 then
     echo "Installing brew..."
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"

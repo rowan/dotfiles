@@ -29,6 +29,12 @@ The terminal configuration:
     - Then, runs all other **app/\*\*/\*.zsh** scripts (excluding **install.zsh** or **completion.zsh**)
     - Finally, runs **app/\*\*/completion.zsh** scripts (to setup autocompletes)
 
+4. Restart terminal
+
+This should now be running with new theme and with modified path, prompt etc.
+
+Note: initially several of the files that are run when the terminal is started will fail, as dependencies such as `yarn` and `rbenv` have not been installed yet.
+
 ## update 
 
 To update an existing environment:

@@ -21,13 +21,9 @@ echo "▶️  Setup macOS defaults"
 source "$SCRIPTS/macos-defaults.zsh"
 echo "Done"
 
-# run brew bundle
+# update homebrew (install if missing) + run brew bundle
 echo "▶️  Update homebrew"
-echo "› \033[00;34mbrew update\033[0m"
-brew update
-echo "› \033[00;34mbrew bundle\033[0m"
-brew bundle --file $DOTFILES/apps/homebrew/Brewfile --mas
-# sudo xcodebuild -license accept
+source "$DOTFILES/scripts/homebrew.zsh"
 echo "Done"
 
 # run install scripts
@@ -42,6 +38,7 @@ echo "Done"
 # run macOS updates
 echo "▶️  Update macOS"
 sudo softwareupdate -i -a
+echo "Done"
 
 # and... we're done!
 echo "✅ All up-to-date"

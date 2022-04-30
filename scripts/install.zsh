@@ -17,9 +17,5 @@ echo "DOTFILES = ${DOTFILES}"
 echo "▶️  Setup terminal"
 source "$DOTFILES/scripts/terminal.zsh"
 
-# install homebrew
-echo "▶️  Install homebrew"
-source "$DOTFILES/scripts/homebrew.zsh"
-
 # prompt to reboot terminal and run update scripts
-echo "✅ Initial install complete - please restart terminal and run 'source scripts/update.zsh'"
+echo "✅ Initial install complete - please restart terminal and run 'dot'"

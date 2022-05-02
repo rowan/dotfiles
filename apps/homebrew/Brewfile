@@ -41,6 +41,7 @@ cask 'sketch'
 # cask 'slack' - this now installed from Mac App Store
 cask 'vlc'
 cask 'visual-studio-code'
+cask 'zoom'
 
 mas "1Blocker", id: 1365531024
 mas "Postico", id: 1031280567

@@ -1,5 +1,7 @@
 # update an existing environment
 
+sudo echo "Enter the admin password, once and done ..."
+
 APPS=$DOTFILES/apps
 SCRIPTS=$DOTFILES/scripts
 

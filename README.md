@@ -56,18 +56,9 @@ This:
 
 ---
 
-To investigate:
+TODO: better user defaults
 - [`apply-user-defaults`](https://github.com/zero-sh/apply-user-defaults)
 - https://github.com/mathiasbynens/dotfiles/blob/main/.macos
-
-Broken:
-- Need to accept XCode license
-`sudo xcodebuild -license`
-- Bunch of Apple errors related to XCode tools being installed in two locations???
-`Class AppleTypeCRetimerRestoreInfoHelper is implemented in both /usr/lib/libauthinstall.dylib (0x1ed579eb0) and /Library/Apple/System/Library/PrivateFrameworks/MobileDevice.framework/Versions/A/MobileDevice (0x10a5b84f8)`
-https://developer.apple.com/forums/thread/698628
-https://developer.apple.com/forums/thread/670389
-
 
 ---
 

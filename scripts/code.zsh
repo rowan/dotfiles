@@ -15,7 +15,18 @@ then
     p RowanWeb
     npm i
 else
-    echo "\033[00;34mRowanWeb\033[0m already exists"
+    echo "$fg[blue]RowanWeb$reset_color already exists"
+fi
+
+# HokuWeb
+
+if [ ! -d "$PROJECTS/HokuWeb" ]
+then
+    git clone https://github.com/HokuNZ/HokuWeb.git $PROJECTS/HokuWeb/
+    p HokuWeb
+    github $PROJECTS/HokuWeb/
+else
+    echo "$fg[blue]HokuWeb$reset_color already exists"
 fi
 
 # Hive
@@ -25,14 +36,79 @@ then
     git clone https://github.com/HokuNZ/Hive.git $PROJECTS/Hive/
     p Hive
     rbenv install
-    # gem install bundler
+    gem install bundler
     bundle install
     yarn
+    vared -c -p "✋ What is the %{$fg_bold[white]%}development%{$reset_color%} master key for Hive (look in 1Password)? " hive_dev_key
+    echo $hive_dev_key > config/credentials/development.key
+    vared -c -p "✋ What is the %{$fg_bold[white]%}test%{$reset_color%} master key for Hive (look in 1Password)? " hive_test_key
+    echo $hive_test_key > config/credentials/test.key
     gem install rails
     rails db:setup
     github $PROJECTS/Hive/
 else
-    echo "\033[00;34mHive\033[0m already exists"
+    echo "$fg[blue]Hive$reset_color already exists"
 fi
+
+
+# Dash
+
+if [ ! -d "$PROJECTS/Dash" ]
+then
+    git clone https://github.com/HokuNZ/Dash.git $PROJECTS/Dash/
+    p Dash
+    rbenv install
+    gem install bundler
+    bundle install
+    yarn
+    vared -c -p "✋ What is the %{$fg_bold[white]%}development%{$reset_color%} master key for Dash (look in 1Password)? " dash_dev_key
+    echo $dash_dev_key > config/credentials/development.key
+    vared -c -p "✋ What is the %{$fg_bold[white]%}test%{$reset_color%} master key for Dash (look in 1Password)? " dash_test_key
+    echo $dash_test_key > config/credentials/test.key
+    gem install rails
+    rails db:setup
+    github $PROJECTS/Dash/
+else
+    echo "$fg[blue]Dash$reset_color already exists"
+fi
+
+# TraigeWeb
+
+if [ ! -d "$PROJECTS/TriageWeb" ]
+then
+    git clone https://github.com/HokuNZ/TriageWeb.git $PROJECTS/TriageWeb/
+    p TriageWeb
+    npm i
+    github $PROJECTS/TriageWeb/
+else
+    echo "$fg[blue]TriageWeb$reset_color already exists"
+fi
+
+# Money Wings 
+
+if [ ! -d "$PROJECTS/MoneyWings" ]
+then
+    git clone https://github.com/HokuNZ/MoneyWings.git $PROJECTS/MoneyWings/
+    p MoneyWings
+    rbenv install
+    gem install bundler
+    bundle install
+    yarn
+    vared -c -p "✋ What is the %{$fg_bold[white]%}development%{$reset_color%} master key for Money Wings (look in 1Password)? " money_wings_dev_key
+    echo $money_wings_dev_key > config/credentials/development.key
+    vared -c -p "✋ What is the %{$fg_bold[white]%}test%{$reset_color%} master key for Money Wings (look in 1Password)? " money_wings_test_key
+    echo $money_wings_test_key > config/credentials/test.key
+    gem install rails
+    rails db:setup
+    github $PROJECTS/MoneyWings/
+else
+    echo "$fg[blue]MoneyWings$reset_color already exists"
+fi
+
+# MailTriage
+# TODO:!!!
+
+# HoddyRoad
+# TODO:!!!
 
 cd $DOTFILES

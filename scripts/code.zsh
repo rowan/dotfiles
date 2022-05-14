@@ -106,9 +106,29 @@ else
 fi
 
 # MailTriage
-# TODO:!!!
+if [ ! -d "$PROJECTS/MailTriage" ]
+then
+    git clone https://github.com/HokuNZ/MailTriage.git $PROJECTS/MailTriage/
+    p MailTriage
+    gem install bundler
+    bundle install
+    github $PROJECTS/MailTriage/
+    open MailTriage.xcodeproj
+else
+    echo "$fg[blue]MailTriage$reset_color already exists"
+fi
 
 # HoddyRoad
-# TODO:!!!
+if [ ! -d "$PROJECTS/HoddyRoad" ]
+then
+    git clone https://github.com/HokuNZ/HoddyRoad.git $PROJECTS/HoddyRoad/
+    p HoddyRoad
+    # gem install bundler
+    # bundle install
+    github $PROJECTS/HoddyRoad/
+    open HoddyRoad.xcodeproj
+else
+    echo "$fg[blue]HoddyRoad$reset_color already exists"
+fi
 
 cd $DOTFILES

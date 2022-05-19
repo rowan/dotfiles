@@ -14,6 +14,7 @@ then
     git clone https://github.com/HokuNZ/RowanWeb.git $PROJECTS/RowanWeb/
     p RowanWeb
     npm i
+    github $PROJECTS/RowanWeb/
 else
     echo "$fg[blue]RowanWeb$reset_color already exists"
 fi

@@ -10,7 +10,7 @@ To install these dotfiles on a new environment:
 `xcode-select --install`
 
 2. Clone the repository:
-`git clone https://github.com/rowan/dotfiles.git ~/.dotfiles`
+`git clone https://github.com/HokuNZ/dotfiles.git ~/.dotfiles`
 
 3. Then, run **install**:
 `cd ~/.dotfiles`

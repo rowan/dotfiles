@@ -9,35 +9,86 @@ E.g. Mini/mini, or Studio/studio
 - System Preferences > Users & Groups
 - Click the lock to allow changes
 - Right click on default user account (this should be named to match the machine - e.g. "Mini"), and select `Advanced Options...`
-- Update the home directory to use the capitalised name
-- Restart
-- Using Finder, rename the /User directory to use the capitalised name
-- Restart
+- Update the home directory to be `Temp`
+- Restart (this will ask you to reconfig macOS settings, which you can skip)
+- Using Finder, rename `/Users/[name]` to use the capitalised name
+- System Preferences > Users & Groups
+- Repeat the steps above to change the home directory to use the newly renamed capitalised maching name folder
+- Using Finder, delete `/Users/Temp`
 
 The home folder should now reference the capitalised version.
 
-1b. Update the shared name of the computer
+2. Update sharing settings
 
 - System Preferences > Sharing
 - Change the Computer Name
 - Click `Edit...` to update the LAN name
 
-2. Run the `dotfiles` install + update 
+Then... (optional)
+
+- Select 'Screen Sharing' from the menu
+
+3. Run the `dotfiles` install + update 
 
 See [README.md]
 
-3. Setup 1Password
+4. Setup 1Password
 
-4. Setup Dropbox
+- Master Password
+- TouchID
+- Apple Watch?
+- Add Chrome extension
 
-5. Setup team apps
+5. Setup Finder
+
+- Finder > Preferences
+- General > Set New Finder Window to show home directory
+- Sidebar > Add home directory (can then drag and drop other folders onto the favourites in sidebar e.g. add Dropbox folders)
+- Advances > Select 'Remove items from the Bin after 30 days'
+
+6. Setup Internet Accounts
+
+- System Preferences > Internet Accounts
+- Should list all accounts linked to iCloud account as inactive
+- For Google accounts, 'Mail' and 'Calendar' should be ticked (need to authenticate when selecting 'Mail')
+- For iCloud accounts all options should be ticked
+
+7. Setup Mail Preferences
+- New Message Sound: None (also untick 'Play sounds for other mail actions')
+- Remove Unedited Downloads: When Mail Quits
+- Select 'Automatically try sending later...'
+- Accounts > Download attachments: All (for each account)
+- Fonts & Colors > Message: Helvetica 14, Fixed-width: Monaco 14
+- Viewing > List Preview: None, also tick 'Display unread messages with bold font' and 'Use Smart Addresses'
+- Composing > Send new messages from: rowan@hoku.nz
+
+Then...
+
+- System Preferences > Keyboard > Shortcuts
+- Add a new shortcut for Mail, Menu Title: "Archive", Keyboard Shortcur Cmd-Shift-A
+
+8. Setup Calendar Preferences:
+- Select default calendar
+- Unselect 'Show Birthdays Calendar' and 'Show Holidays Calendar' (these are managed via Google Calendar)
+- Turn on Timezone support (under Advanced)
+
+9. Setup Applications
 
 - Asana
+- Dropbox
 - Notion
 - Slack
 - Zoom
 
-6. Setup dev environment
+Then...
+
+Setup Accessibility permissions for Dropbox and Zoom:
+
+- System Preferences > Security & Privacy ...
+- Privacy, then allow Dropbox and Zoom
+- Camera & Microphone, allow Zoom
+
+10. Setup dev environment
 
 - Open `Github Desktop`
 - Sign in
@@ -52,16 +103,39 @@ or...
 
 For hugo applications...
 
+- Run `hugo server -D` to start local server
+
 For rails applications...
 
-For xcode applications...
+- Run `bundle`
+- Run `dev` to start local server
 
-- Setup `Postico`
+For xcode applications...
+_TO BE COMPLETED_
+- Config Xcode to open using Rosetta?
+- Setup AppleID (Xcode > Preferences > Accounts)
+
+11. Setup `Postico`
+
+_TO BE COMPLETED_
+
 TODO: needs pgfav files in 1Password??
+
+12. Setup `VS Code`
+
+_TO BE COMPLETED_
+
 - Install `Visual Studio Code` plugins
 TODO: are these saved in a preferences file somewhere?
 
-7. (Optional) Setup `Influx`
+- Right click on Explorer and select "Open Editors" to view summary of currently open files
+
+13. Setup `Printers`
+
+- System Preferences > Printers & Scanners
+- Press "+" and choose printers to install
+
+14. Setup `Influx` (optional)
 
 To backup:
 `influx backup -compression gzip ./ -t [token]`
@@ -75,4 +149,10 @@ This assumes the backup files are in the current working directory.
 
 Note: substitute [token] with an API token 
 
-8. (Optional) Setup Plex server??
+15. Setup `Plex` (optional)
+
+_TO BE COMPLETED_
+
+OSX settings:
+- Dock
+- Screen Sharing

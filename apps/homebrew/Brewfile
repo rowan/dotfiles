@@ -39,6 +39,7 @@ cask 'pastebot'
 cask 'paw'
 cask 'sketch'
 # cask 'slack' - this now installed from Mac App Store
+cash 'sonos'
 cask 'vlc'
 cask 'visual-studio-code'
 cask 'zoom'

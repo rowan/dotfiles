@@ -4,14 +4,15 @@
 #   https://github.com/mathiasbynens/dotfiles/blob/master/.macos
 # TODO: check the original list and add more defaults!
 
-# Disable press-and-hold for keys in favor of key repeat.
-# defaults write -g ApplePressAndHoldEnabled -bool false
+# Turn on app auto-update
+defaults write com.apple.SoftwareUpdate AutomaticCheckEnabled -bool true
+defaults write com.apple.commerce AutoUpdate -bool true
 
 # Use AirDrop over every interface. srsly this should be a default.
 defaults write com.apple.NetworkBrowser BrowseAllInterfaces 1
 
-# Always open everything in Finder's list view. This is important.
-# defaults write com.apple.Finder FXPreferredViewStyle Nlsv
+# Always open everything in Finder's column view. This is important.
+defaults write com.apple.Finder FXPreferredViewStyle clmv
 
 # Show the ~/Library folder.
 # chflags nohidden ~/Library
@@ -19,9 +20,13 @@ defaults write com.apple.NetworkBrowser BrowseAllInterfaces 1
 # Set a really fast key repeat.
 # defaults write NSGlobalDomain KeyRepeat -int 1
 
+# Disable force click action on trackpad
+defaults write com.apple.AppleMultitouchTrackpad TrackpadThreeFingerTapGesture 2
+
 # Set the Finder prefs for showing a few different volumes on the Desktop.
-# defaults write com.apple.finder ShowExternalHardDrivesOnDesktop -bool true
-# defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool true
+defaults write com.apple.finder ShowHardDrivesOnDesktop -bool false
+defaults write com.apple.finder ShowExternalHardDrivesOnDesktop -bool false
+defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool false
 
 # Hide Safari's bookmark bar.
 # defaults write com.apple.Safari ShowFavoritesBar -bool false
@@ -41,3 +46,6 @@ defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true
 # see: /scripts/terminal.zsh
 # defaults write com.apple.terminal "Default Window Settings" -string "Solarized Dark"
 # defaults write com.apple.Terminal "Startup Window Settings" -string "Solarized Dark"
+
+# Prevent Photos from opening automatically when devices are plugged in
+defaults -currentHost write com.apple.ImageCapture disableHotPlug -bool true

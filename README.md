@@ -66,7 +66,6 @@ To update this fork:
 
 TODO: better user defaults
 - [`apply-user-defaults`](https://github.com/zero-sh/apply-user-defaults)
-- https://github.com/mathiasbynens/dotfiles/blob/main/.macos
 
 ---
 

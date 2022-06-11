@@ -152,7 +152,3 @@ Note: substitute [token] with an API token
 15. Setup `Plex` (optional)
 
 _TO BE COMPLETED_
-
-OSX settings:
-- Dock
-- Screen Sharing

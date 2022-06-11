@@ -1,8 +1,4 @@
 # Sets macOS defaults.
-#
-# The original idea (and a couple settings) were grabbed from:
-#   https://github.com/mathiasbynens/dotfiles/blob/master/.macos
-# TODO: check the original list and add more defaults!
 
 # Turn on app auto-update
 defaults write com.apple.SoftwareUpdate AutomaticCheckEnabled -bool true
@@ -17,8 +13,8 @@ defaults write com.apple.Finder FXPreferredViewStyle clmv
 # Show the ~/Library folder.
 # chflags nohidden ~/Library
 
-# Set a really fast key repeat.
-# defaults write NSGlobalDomain KeyRepeat -int 1
+# Save files to disk (rather than iCloud) by default
+defaults write NSGlobalDomain "NSDocumentSaveNewDocumentsToCloud" -bool "false" 
 
 # Disable force click action on trackpad
 defaults write com.apple.AppleMultitouchTrackpad TrackpadThreeFingerTapGesture 2
@@ -49,3 +45,6 @@ defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true
 
 # Prevent Photos from opening automatically when devices are plugged in
 defaults -currentHost write com.apple.ImageCapture disableHotPlug -bool true
+
+# Show the dock on the right
+defaults write com.apple.dock "orientation" -string "right" && killall Dock

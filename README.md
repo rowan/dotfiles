@@ -54,6 +54,14 @@ This:
 - Runs **app/\*\*/install.zsh** scripts
 - Updates macOS
 
+## sync with rowan/dotfiles
+
+To update this fork:
+
+- Create a new Pull Request
+- The base should be `HokuNZ/dotfiles` + the head should be `rowan/dotfiles` (note: click on the `switching the base` link in Github)
+- Merge changes, as required
+
 ---
 
 TODO: better user defaults

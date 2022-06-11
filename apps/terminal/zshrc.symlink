@@ -19,14 +19,14 @@ export PROJECTS=~/Documents/Code
 # load the path files
 for file in $(find $APPS -name "path.zsh")
 do
-  echo "› \033[00;34m${file}\033[0m"
+  # echo "› \033[00;34m${file}\033[0m"
   source $file
 done
 
 # load everything except the install, path and completion files
 for file in $(find $APPS -name "*.zsh" -not -name "install.zsh" -not -name "path.zsh" -not -name "completion.zsh")
 do
-  echo "› \033[00;34m${file}\033[0m"
+  # echo "› \033[00;34m${file}\033[0m"
   source $file
 done
 
@@ -37,6 +37,6 @@ compinit
 # load every completion after autocomplete loads
 for file in $(find $APPS -name "completion.zsh")
 do
-  echo "› \033[00;34m${file}\033[0m"
+  # echo "› \033[00;34m${file}\033[0m"
   source $file
 done

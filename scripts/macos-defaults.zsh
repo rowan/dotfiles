@@ -8,7 +8,7 @@ defaults write com.apple.commerce AutoUpdate -bool true
 defaults write com.apple.NetworkBrowser BrowseAllInterfaces 1
 
 # Always open everything in Finder's column view. This is important.
-defaults write com.apple.Finder FXPreferredViewStyle clmv
+# defaults write com.apple.Finder FXPreferredViewStyle clmv
 
 # Show the ~/Library folder.
 # chflags nohidden ~/Library
@@ -47,4 +47,4 @@ defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true
 defaults -currentHost write com.apple.ImageCapture disableHotPlug -bool true
 
 # Show the dock on the right
-defaults write com.apple.dock "orientation" -string "right" && killall Dock
+#$ defaults write com.apple.dock "orientation" -string "right" && killall Dock

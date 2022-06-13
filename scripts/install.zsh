@@ -9,6 +9,10 @@ echo "▶️  Setup dotfiles"
 export DOTFILES=$HOME/.dotfiles
 echo "DOTFILES = ${DOTFILES}"
 
+# install rosetta
+echo "▶️  Install rosetta"
+softwareupdate --install-rosetta --agree-to-license
+
 # setup terminal
 echo "▶️  Setup terminal"
 source "$DOTFILES/scripts/terminal.zsh"

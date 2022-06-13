@@ -18,14 +18,14 @@ else
   exit 1
 fi
 
-# setup macOS defaults
-echo "▶️  Setup macOS defaults"
-source "$SCRIPTS/macos-defaults.zsh"
-echo "Done"
-
 # update homebrew (install if missing) + run brew bundle
 echo "▶️  Update homebrew"
 source "$DOTFILES/scripts/homebrew.zsh"
+echo "Done"
+
+# setup macOS defaults
+echo "▶️  Setup macOS defaults"
+source "$SCRIPTS/macos-defaults.zsh"
 echo "Done"
 
 # run install scripts

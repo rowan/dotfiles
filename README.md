@@ -58,7 +58,8 @@ This:
 
 To update this fork:
 
-- Create a new Pull Request
+- Look for the "Fetch Upstream" button on [https://github.com/HokuNZ/dotfiles/tree/main]
+- If necessary, create a new Pull Request
 - The base should be `HokuNZ/dotfiles` + the head should be `rowan/dotfiles` (note: click on the `switching the base` link in Github)
 - Merge changes, as required
 

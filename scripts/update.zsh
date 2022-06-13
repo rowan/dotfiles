@@ -25,16 +25,12 @@ echo "Done"
 
 # setup macOS defaults
 echo "▶️  Setup macOS defaults"
-source "$SCRIPTS/macos-defaults.zsh"
+source "$SCRIPTS/defaults.zsh"
 echo "Done"
 
 # run install scripts
 echo "▶️  Run install scripts"
-for file in $(find $APPS -name "install.zsh")
-do
-  echo "› \033[00;34m${file}\033[0m"
-  source $file
-done
+source "$SCRIPTS/apps.zsh"
 echo "Done"
 
 # run macOS updates

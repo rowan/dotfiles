@@ -1,4 +1,4 @@
-# Sets macOS defaults.
+# Sets macOS defaults
 
 # Kill apps that are updateds
 killall Safari

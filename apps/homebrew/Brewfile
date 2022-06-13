@@ -2,8 +2,10 @@ cask_args appdir: '/Applications'
 
 tap 'homebrew/bundle'
 tap 'homebrew/cask-drivers'
+tap 'zero-sh/tap'
 
 brew 'ack'
+brew 'apply-user-defaults' #see: github.com/zero-sh/apply-user-defaults
 brew 'cocoapods'
 brew 'coreutils'
 brew 'gh'

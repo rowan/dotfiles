@@ -14,7 +14,7 @@ com.apple.AppleMultitouchTrackpad:
 
 # Dock- show on the right
 com.apple.dock:
-  orientation: "right"
+#  orientation: "right"
   autohide: false
 
 # Finder - don't show volumes on desktop

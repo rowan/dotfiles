@@ -9,10 +9,6 @@ echo "▶️  Setup dotfiles"
 export DOTFILES=$HOME/.dotfiles
 echo "DOTFILES = ${DOTFILES}"
 
-# run macOS updates
-# echo "▶️  Update macOS"
-# sudo softwareupdate -i -a
-
 # setup terminal
 echo "▶️  Setup terminal"
 source "$DOTFILES/scripts/terminal.zsh"

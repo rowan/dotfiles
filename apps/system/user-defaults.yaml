@@ -1,0 +1,47 @@
+# Turn on app auto-update
+com.apple.SoftwareUpdate:
+  AutomaticCheckEnabled: true
+com.apple.commerce:
+  AutoUpdate: true
+
+# Use AirDrop over every interface
+com.apple.NetworkBrowser:
+  BrowseAllInterfaces: 1
+
+# Disable force click action on trackpad
+com.apple.AppleMultitouchTrackpad:
+  TrackpadThreeFingerTapGesture: 2
+
+# Dock- show on the right
+com.apple.dock:
+  orientation: "right"
+  autohide: false
+
+# Finder - don't show volumes on desktop
+com.apple.finder:
+  ShowHardDrivesOnDesktop: false
+  ShowExternalHardDrivesOnDesktop: false
+  ShowRemovableMediaOnDesktop: false
+  FXPreferredViewStyle: "clmv"
+
+# Don't create .DS_Store files on network or USB volumes
+com.apple.desktopservices:
+  DSDontWriteNetworkStores: true
+  DSDontWriteUSBStores: true
+
+# Save files to disk (rather than iCloud) by default
+NSGlobalDomain:
+  NSDocumentSaveNewDocumentsToCloud: false
+
+# Photos - don't open automatically when devices are plugged in
+com.apple.ImageCapture:
+  disableHotPlug: true
+
+# Safari - set up development.
+com.apple.Safari:
+  IncludeInternalDebugMenu: true
+  IncludeDevelopMenu: true
+  WebKitDeveloperExtrasEnabledPreferenceKey: true
+  "com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled": true
+NSGlobalDomain:
+  WebKitDeveloperExtras: true

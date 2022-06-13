@@ -22,7 +22,7 @@ com.apple.finder:
   ShowHardDrivesOnDesktop: false
   ShowExternalHardDrivesOnDesktop: false
   ShowRemovableMediaOnDesktop: false
-  FXPreferredViewStyle: "clmv"
+#  FXPreferredViewStyle: "clmv"
 
 # Don't create .DS_Store files on network or USB volumes
 com.apple.desktopservices:

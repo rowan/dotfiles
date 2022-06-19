@@ -2,9 +2,6 @@
 
 sudo echo "Enter the admin password, once and done ..."
 
-APPS=$DOTFILES/apps
-SCRIPTS=$DOTFILES/scripts
-
 # if there is an error then stop immediately
 set -e
 
@@ -25,12 +22,12 @@ echo "Done"
 
 # setup macOS defaults
 echo "▶️  Setup macOS defaults"
-source "$SCRIPTS/defaults.zsh"
+source "$DOTFILES/scripts/defaults.zsh"
 echo "Done"
 
 # run install scripts
 echo "▶️  Run install scripts"
-source "$SCRIPTS/apps.zsh"
+source "$DOTFILES/scripts/apps.zsh"
 echo "Done"
 
 # run macOS updates

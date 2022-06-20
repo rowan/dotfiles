@@ -38,10 +38,15 @@ com.apple.ImageCapture:
   disableHotPlug: true
 
 # Safari - set up development.
+# com.apple.Safari.SandboxBroker:
+#   ShowDevelopMenu: true
 com.apple.Safari:
-  IncludeInternalDebugMenu: true
-  IncludeDevelopMenu: true
-  WebKitDeveloperExtrasEnabledPreferenceKey: true
-  "com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled": true
-NSGlobalDomain:
-  WebKitDeveloperExtras: true
+  AlwaysRestoreSessionAtLaunch: 1
+  HomePage: "https://hoku.nz/"
+#  IncludeDevelopMenu: true
+#  IncludeInternalDebugMenu: true
+#  WebKitDeveloperExtrasEnabledPreferenceKey: true
+#  "com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled": true
+#NSGlobalDomain:
+#  WebKitDeveloperExtras: true
+# note: for these to work we need to first grant "Full Disk Access" permission to terminal - see

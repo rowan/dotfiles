@@ -117,9 +117,7 @@ _TO BE COMPLETED_
 
 11. Setup `Postico`
 
-_TO BE COMPLETED_
-
-TODO: needs pgfav files in 1Password??
+- Import favourites from ~/.dotfiles/apps/postico
 
 12. Setup `VS Code`
 

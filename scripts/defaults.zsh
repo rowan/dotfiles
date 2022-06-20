@@ -1,7 +1,7 @@
 # Sets macOS defaults
 
 # Kill apps that are updateds
-killall Safari
+osascript -e 'quit app "Safari"'
 
 # Apply defaults
 apply-user-defaults apps/system/user-defaults.yaml --verbose

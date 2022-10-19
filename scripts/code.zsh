@@ -145,7 +145,7 @@ then
     echo $hoddy_api_test_key > config/credentials/test.key
     gem install rails
     rails db:setup
-    github $PROJECTS/Hive/
+    github $PROJECTS/HoddyRoadAPI/
 else
     echo "$fg[blue]HoddyRoadAPI$reset_color already exists"
 fi

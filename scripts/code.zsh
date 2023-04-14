@@ -132,22 +132,4 @@ else
     echo "$fg[blue]HoddyRoad$reset_color already exists"
 fi
 
-# HoddyRoadAPI
-if [ ! -d "$PROJECTS/HoddyRoadAPI" ]
-then
-    git clone https://github.com/HokuNZ/HoddyRoadAPI.git $PROJECTS/HoddyRoadAPI/
-    p HoddyRoadAPI
-    gem install bundler
-    bundle install
-    vared -c -p "✋ What is the %{$fg_bold[white]%}development%{$reset_color%} master key for HoddyRoadAPI (look in 1Password)? " hoddy_api_dev_key
-    echo $hoddy_api_dev_key > config/credentials/development.key
-    vared -c -p "✋ What is the %{$fg_bold[white]%}test%{$reset_color%} master key for HoddyRoadAPI (look in 1Password)? " hoddy_api_test_key
-    echo $hoddy_api_test_key > config/credentials/test.key
-    gem install rails
-    rails db:setup
-    github $PROJECTS/HoddyRoadAPI/
-else
-    echo "$fg[blue]HoddyRoadAPI$reset_color already exists"
-fi
-
 cd $DOTFILES

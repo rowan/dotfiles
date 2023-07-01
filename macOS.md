@@ -53,7 +53,8 @@ See [README.md]
 - For Google accounts, 'Mail' and 'Calendar' should be ticked (need to authenticate when selecting 'Mail')
 - For iCloud accounts all options should be ticked
 
-7. Setup Mail Preferences
+7. Setup Mail 
+- Mail > Settings...
 - New Message Sound: None (also untick 'Play sounds for other mail actions')
 - Remove Unedited Downloads: When Mail Quits
 - Select 'Automatically try sending later...'
@@ -66,6 +67,14 @@ Then...
 
 - System Preferences > Keyboard > Shortcuts
 - Add a new shortcut for Mail, Menu Title: "Archive", Keyboard Shortcur Cmd-Shift-A
+
+Then...
+
+- Import Trade Me + Xero mbox archives
+(these are currently on the NAS: Backup/Laptop/Laptop 2013-12-21 17.45/Public/Keep/Import)
+
+_TODO: ADD BETTER INSTRUCTIONS FOR THIS IMPORT_
+_TODO: THESE FILES SHOULD BE KEPT SOMEWHERE MORE OBVIOUS/SAFER_
 
 8. Setup Calendar Preferences:
 - Select default calendar

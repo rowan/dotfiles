@@ -34,10 +34,9 @@ See [README.md]
 
 4. Setup 1Password
 
-- Master Password
-- TouchID
-- Apple Watch?
-- Add Chrome extension
+- Choose the correct Hoku Group account and enter master password
+- Follow instructions to install Safari browser extension
+- Settings > Security, to add Touch ID unlock
 
 5. Setup Finder
 
@@ -76,12 +75,21 @@ Then...
 _TODO: ADD BETTER INSTRUCTIONS FOR THIS IMPORT_
 _TODO: THESE FILES SHOULD BE KEPT SOMEWHERE MORE OBVIOUS/SAFER_
 
-8. Setup Calendar Preferences:
+8. Setup Calendar Preferences
+
 - Select default calendar
 - Unselect 'Show Birthdays Calendar' and 'Show Holidays Calendar' (these are managed via Google Calendar)
 - Turn on Timezone support (under Advanced)
 
-9. Setup Applications
+9. Setup Chrome browser
+
+- Open Chrome - don't set as default!
+- Add a new user profile (click on the profile icon in toolbar, and choose add profile)
+- Sign into Google account
+- Setup sync, to install extensions etc
+- Delete the default user profile
+
+10. Setup Applications
 
 - Asana
 - Dropbox
@@ -97,7 +105,7 @@ Setup Accessibility permissions for Dropbox and Zoom:
 - Privacy, then allow Dropbox and Zoom
 - Camera & Microphone, allow Zoom
 
-10. Setup dev environment
+11. Setup dev environment
 
 - Open `Github Desktop`
 - Sign in
@@ -124,11 +132,11 @@ _TO BE COMPLETED_
 - Config Xcode to open using Rosetta?
 - Setup AppleID (Xcode > Preferences > Accounts)
 
-11. Setup `Postico`
+12. Setup `Postico`
 
 - Import favourites from ~/.dotfiles/apps/postico
 
-12. Setup `VS Code`
+13. Setup `VS Code`
 
 _TO BE COMPLETED_
 
@@ -137,12 +145,12 @@ TODO: are these saved in a preferences file somewhere?
 
 - Right click on Explorer and select "Open Editors" to view summary of currently open files
 
-13. Setup `Printers`
+14. Setup `Printers`
 
 - System Preferences > Printers & Scanners
 - Press "+" and choose printers to install
 
-14. Setup `Influx` (optional)
+15. Setup `Influx` (optional)
 
 To backup:
 `influx backup -compression gzip ./ -t [token]`
@@ -156,6 +164,6 @@ This assumes the backup files are in the current working directory.
 
 Note: substitute [token] with an API token 
 
-15. Setup `Plex` (optional)
+16. Setup `Plex` (optional)
 
 _TO BE COMPLETED_

@@ -7,8 +7,8 @@ E.g. Mini/mini, or Studio/studio
 1. Update the location of the home directory created during install
 
 - System Preferences > Users & Groups
-- Click the lock to allow changes
 - Right click on default user account (this should be named to match the machine - e.g. "Mini"), and select `Advanced Options...`
+- Enter password to allow changes
 - Update the home directory to be `Temp`
 - Restart (this will ask you to reconfig macOS settings, which you can skip)
 - Using Finder, rename `/Users/[name]` to use the capitalised name

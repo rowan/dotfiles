@@ -23,6 +23,7 @@ com.apple.finder:
   ShowExternalHardDrivesOnDesktop: false
   ShowRemovableMediaOnDesktop: false
   FXPreferredViewStyle: "clmv"
+  EmptyTrashSecurely: true
 
 # Don't create .DS_Store files on network or USB volumes
 com.apple.desktopservices:
@@ -41,6 +42,7 @@ com.apple.ImageCapture:
 com.apple.Safari.SandboxBroker:
   ShowDevelopMenu: true
 com.apple.Safari:
+  AutoFillPasswords: false
   AlwaysRestoreSessionAtLaunch: 1
   HomePage: "https://hoku.nz/"
   IncludeDevelopMenu: true
@@ -50,3 +52,11 @@ com.apple.Safari:
 NSGlobalDomain:
   WebKitDeveloperExtras: true
 # note: for these to work we need to first grant "Full Disk Access" permission to terminal - see
+
+# Calendar
+com.apple.iCal:
+  "TimeZone support enabled": true
+  "display birthdays calendar": true
+  "display holidays calendar": true
+  CalendarListMiniMonthVisibleMonths: 3
+  CalendarSidebarShown: true

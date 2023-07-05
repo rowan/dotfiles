@@ -1,2 +1,2 @@
 # restart the service
-brew services restart postgresql
+brew services restart postgresql@14

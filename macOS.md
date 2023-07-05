@@ -49,21 +49,22 @@ See [README.md]
 - Choose "Available offline" for sync storage
 - Setup Selective Sync (optional)
   
-5. Setup Finder
+6. Setup Finder
 
 - Finder > Settings
 - General > Set New Finder Window to show home directory
 - Sidebar > Add home directory (can then drag and drop other folders onto the favourites in sidebar e.g. add Dropbox folders)
 - Advances > Select 'Remove items from the Bin after 30 days'
 
-6. Setup Internet Accounts
+7. Setup Internet Accounts
 
-- System Preferences > Internet Accounts
+- System Settings > Internet Accounts
 - Should list all accounts linked to iCloud account as inactive
 - For Google accounts, 'Mail' and 'Calendar' should be ticked (need to authenticate when selecting 'Mail')
 - For iCloud accounts all options should be ticked
 
-7. Setup Mail 
+8. Setup Mail
+   
 - Mail > Settings...
 - New Message Sound: None (also untick 'Play sounds for other mail actions')
 - Remove Unedited Downloads: When Mail Quits
@@ -75,7 +76,7 @@ See [README.md]
 
 Then...
 
-- System Preferences > Keyboard > Shortcuts
+- System Settings > Keyboard > Shortcuts
 - Add a new shortcut for Mail, Menu Title: "Archive", Keyboard Shortcur Cmd-Shift-A
 
 Then...
@@ -103,7 +104,6 @@ _TODO: THESE FILES SHOULD BE KEPT SOMEWHERE MORE OBVIOUS/SAFER_
 10. Setup Applications
 
 - Asana
-- Dropbox
 - Notion
 - Slack
 - Zoom

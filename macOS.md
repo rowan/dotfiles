@@ -6,7 +6,7 @@ E.g. Mini/mini, or Studio/studio
 
 1. Update the location of the home directory created during install
 
-- System Preferences > Users & Groups
+- System Settings > Users & Groups
 - Right click on default user account (this should be named to match the machine - e.g. "Mini"), and select `Advanced Options...`
 - Enter password to allow changes
 - Update the home directory to be `Temp`
@@ -20,7 +20,7 @@ The home folder should now reference the capitalised version.
 
 2. Update sharing settings
 
-- System Preferences > Sharing
+- System Settings > Sharing
 - Change the Computer Name
 - Click `Edit...` to update the LAN name
 
@@ -34,13 +34,24 @@ See [README.md]
 
 4. Setup 1Password
 
+- Open 1Password app
 - Choose the correct Hoku Group account and enter master password
 - Follow instructions to install Safari browser extension
 - Settings > Security, to add Touch ID unlock
 
+5. Setup Dropbox
+
+- Open Dropbox app
+- Click the "Turn On Accessibility" button on the pop-up window
+- Sign-in to Hoku account (use email address + password, rather than Google login button)
+- Choose "Available offline" for sync storage
+- Sign-in to personal account
+- Choose "Available offline" for sync storage
+- Setup Selective Sync (optional)
+  
 5. Setup Finder
 
-- Finder > Preferences
+- Finder > Settings
 - General > Set New Finder Window to show home directory
 - Sidebar > Add home directory (can then drag and drop other folders onto the favourites in sidebar e.g. add Dropbox folders)
 - Advances > Select 'Remove items from the Bin after 30 days'

@@ -128,6 +128,12 @@ Then...
 
 - System Settings > Login items
 - Delete Loom
+
+13. Install Microsoft Office
+
+- Login at microsoft.com
+- Services & Subscriptions > Office
+- Install
   
 13. Other settings
 
@@ -158,7 +164,7 @@ For rails applications...
 For xcode applications...
 _TO BE COMPLETED_
 - Config Xcode to open using Rosetta?
-- Setup AppleID (Xcode > Preferences > Accounts)
+- Setup AppleID (Xcode > Settings > Accounts)
 
 15. Setup Postico
 
@@ -166,12 +172,8 @@ _TO BE COMPLETED_
 
 16. Setup VS Code
 
-_TO BE COMPLETED_
-
-- Install `Visual Studio Code` plugins
-TODO: are these saved in a preferences file somewhere?
-
-- Right click on Explorer and select "Open Editors" to view summary of currently open files
+- Code > Settings > Turn on settings sync
+- Sign in with Github, this will sync settings and extensions across devices
 
 17. Setup Printers
 

@@ -26,20 +26,26 @@ The home folder should now reference the capitalised version.
 
 Then... (optional)
 
-- Select 'Screen Sharing' from the menu
+- Select "Screen Sharing" from the menu
 
 3. Run the `dotfiles` install + update 
 
 See [README.md]
-  
-4. Setup 1Password
+
+4. Check iCloud settings
+
+- System Settings > AppleID > iCloud
+- Under "Apps using iCloud" ...
+- Confirm Photos, Contact, Calendars, Reminders and Find My Mac are all turned on
+
+5. Setup 1Password
 
 - Open 1Password app
 - Choose the correct Hoku Group account and enter master password
 - Follow instructions to install Safari browser extension
 - Settings > Security, to add Touch ID unlock
 
-5. Setup Dropbox
+6. Setup Dropbox
 
 - Open Dropbox app
 - Click the "Turn On Accessibility" button on the pop-up window
@@ -49,21 +55,21 @@ See [README.md]
 - Choose "Available offline" for sync storage
 - Setup Selective Sync (optional)
   
-6. Setup Finder
+7. Setup Finder
 
 - Finder > Settings
 - General > Set New Finder Window to show home directory
 - Sidebar > Add home directory (can then drag and drop other folders onto the favourites in sidebar e.g. add Dropbox folders)
 - Advances > Select 'Remove items from the Bin after 30 days'
 
-7. Setup Internet Accounts
+8. Setup Internet Accounts
 
 - System Settings > Internet Accounts
 - Should list all accounts linked to iCloud account as inactive
 - For Google accounts, 'Mail' and 'Calendar' should be ticked (need to authenticate when selecting 'Mail')
 - For iCloud accounts all options should be ticked
 
-8. Setup Mail
+9. Setup Mail
    
 - Mail > Settings...
 - New Message Sound: None (also untick 'Play sounds for other mail actions')
@@ -87,13 +93,13 @@ Then...
 _TODO: ADD BETTER INSTRUCTIONS FOR THIS IMPORT_
 _TODO: THESE FILES SHOULD BE KEPT SOMEWHERE MORE OBVIOUS/SAFER_
 
-9. Setup Calendar Preferences
+10. Setup Calendar Preferences
 
 - Select default calendar
 - Unselect 'Show Birthdays Calendar' and 'Show Holidays Calendar' (these are managed via Google Calendar)
 - Turn on Timezone support (under Advanced)
 
-10. Setup Chrome browser
+11. Setup Chrome browser
 
 - Open Chrome - don't set as default!
 - Add a new user profile (click on the profile icon in toolbar, and choose add profile)
@@ -101,9 +107,10 @@ _TODO: THESE FILES SHOULD BE KEPT SOMEWHERE MORE OBVIOUS/SAFER_
 - Setup sync, to install extensions etc
 - Delete the default user profile
 
-11. Setup Applications
+12. Setup Applications
 
 - Asana
+- Loom
 - Notion
 - Slack
 - Zoom
@@ -114,14 +121,19 @@ Setup Accessibility permissions for Dropbox and Zoom:
 
 - System Settings > Security & Privacy ...
 - Privacy, then allow Dropbox and Zoom
-- Camera & Microphone, allow Zoom
-- Screen Recording, allow Slack and Zoom
+- Camera & Microphone, allow Loom and Zoom
+- Screen Recording, allow Loom, Slack and Zoom
 
-12. Other settings
+Then...
+
+- System Settings > Login items
+- Delete Loom
+  
+13. Other settings
 
 - System Settings > Bluetooth, then disable auto-connect for AirPods (click the 'i' next to select item, then 'When last connected')
 
-13. Setup dev environment
+14. Setup dev environment
 
 - Open `Github Desktop`
 - Sign in
@@ -148,11 +160,11 @@ _TO BE COMPLETED_
 - Config Xcode to open using Rosetta?
 - Setup AppleID (Xcode > Preferences > Accounts)
 
-14. Setup Postico
+15. Setup Postico
 
 - Import favourites from ~/.dotfiles/apps/postico
 
-15. Setup VS Code
+16. Setup VS Code
 
 _TO BE COMPLETED_
 
@@ -161,12 +173,12 @@ TODO: are these saved in a preferences file somewhere?
 
 - Right click on Explorer and select "Open Editors" to view summary of currently open files
 
-16. Setup Printers
+17. Setup Printers
 
 - System Settings > Printers & Scanners
 - Press "+" and choose printers to install
 
-17. Setup Influx (optional)
+18. Setup Influx (optional)
 
 To backup:
 `influx backup -compression gzip ./ -t [token]`
@@ -180,6 +192,6 @@ This assumes the backup files are in the current working directory.
 
 Note: substitute [token] with an API token 
 
-18. Setup Plex (optional)
+19. Setup Plex (optional)
 
 _TO BE COMPLETED_

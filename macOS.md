@@ -117,7 +117,11 @@ Setup Accessibility permissions for Dropbox and Zoom:
 - Camera & Microphone, allow Zoom
 - Screen Recording, allow Slack and Zoom
 
-12. Setup dev environment
+12. Other settings
+
+- System Settings > Bluetooth, then disable auto-connect for AirPods (click the 'i' next to select item, then 'When last connected')
+
+13. Setup dev environment
 
 - Open `Github Desktop`
 - Sign in
@@ -144,11 +148,11 @@ _TO BE COMPLETED_
 - Config Xcode to open using Rosetta?
 - Setup AppleID (Xcode > Preferences > Accounts)
 
-13. Setup Postico
+14. Setup Postico
 
 - Import favourites from ~/.dotfiles/apps/postico
 
-14. Setup VS Code
+15. Setup VS Code
 
 _TO BE COMPLETED_
 
@@ -157,12 +161,12 @@ TODO: are these saved in a preferences file somewhere?
 
 - Right click on Explorer and select "Open Editors" to view summary of currently open files
 
-15. Setup Printers
+16. Setup Printers
 
 - System Preferences > Printers & Scanners
 - Press "+" and choose printers to install
 
-16. Setup Influx (optional)
+17. Setup Influx (optional)
 
 To backup:
 `influx backup -compression gzip ./ -t [token]`
@@ -176,6 +180,6 @@ This assumes the backup files are in the current working directory.
 
 Note: substitute [token] with an API token 
 
-17. Setup Plex (optional)
+18. Setup Plex (optional)
 
 _TO BE COMPLETED_

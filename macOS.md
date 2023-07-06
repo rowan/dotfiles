@@ -163,7 +163,7 @@ TODO: are these saved in a preferences file somewhere?
 
 16. Setup Printers
 
-- System Preferences > Printers & Scanners
+- System Settings > Printers & Scanners
 - Press "+" and choose printers to install
 
 17. Setup Influx (optional)

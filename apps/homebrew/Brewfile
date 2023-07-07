@@ -45,6 +45,7 @@ cask 'microsoft-teams'
 cask 'notion'
 cask 'pastebot'
 cask 'paw'
+cask 'sf-symbols'
 cask 'sketch'
 # cask 'slack' - this now installed from Mac App Store
 cask 'sonos'

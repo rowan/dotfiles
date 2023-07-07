@@ -137,8 +137,12 @@ Then...
   
 13. Other settings
 
+Don't automatically connect to bluetooth headphones:
 - System Settings > Bluetooth, then disable auto-connect for AirPods (click the 'i' next to select item, then 'When last connected')
 
+Change the default location where screenshots are stored:
+- Applications > Screenshot, then Options > Other location... (choose 'Screenshots' directory on personal Dropbox)
+  
 14. Setup dev environment
 
 - Open `Github Desktop`

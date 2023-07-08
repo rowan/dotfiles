@@ -141,6 +141,9 @@ Don't automatically connect to bluetooth headphones:
 
 Change the default location where screenshots are stored:
 - Applications > Screenshot, then Options > Other location... (choose 'Screenshots' directory on personal Dropbox)
+
+Turn off force tap to lookup in dictionary
+- System Settings > Trackpad, then set Lookup & data detectors to 'Off')
   
 14. Setup dev environment
 

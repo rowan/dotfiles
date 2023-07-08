@@ -88,10 +88,9 @@ Then...
 Then...
 
 - Import Trade Me + Xero mbox archives
-(these are currently on the NAS: Backup/Laptop/Laptop 2013-12-21 17.45/Public/Keep/Import)
+(these are currently on the NAS: Backup/Email/)
 
 _TODO: ADD BETTER INSTRUCTIONS FOR THIS IMPORT_
-_TODO: THESE FILES SHOULD BE KEPT SOMEWHERE MORE OBVIOUS/SAFER_
 
 10. Setup Calendar Preferences
 

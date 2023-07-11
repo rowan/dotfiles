@@ -80,17 +80,17 @@ See [README.md]
 - Viewing > List Preview: None, also tick 'Display unread messages with bold font' and 'Use Smart Addresses'
 - Composing > Send new messages from: rowan@hoku.nz
 
-Then...
+Then, setup keyboard shortcut for archive...
 
 - System Settings > Keyboard > Shortcuts
 - Add a new shortcut for Mail, Menu Title: "Archive", Keyboard Shortcur Cmd-Shift-A
 
-Then...
+Then, import old mail archives...
 
-- Import Trade Me + Xero mbox archives
-(these are currently on the NAS: Backup/Email/)
-
-_TODO: ADD BETTER INSTRUCTIONS FOR THIS IMPORT_
+- Copy Trade Me + Xero mbox archives from the NAS: Backup/Email/
+- File > Import mailboxs...
+- Choose 'Files in mbox format' and 'Continue'
+- Select copied folders
 
 10. Setup Calendar Preferences
 

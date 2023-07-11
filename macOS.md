@@ -144,6 +144,9 @@ Change the default location where screenshots are stored:
 
 Turn off force tap to lookup in dictionary
 - System Settings > Trackpad, then set Lookup & data detectors to 'Off')
+
+Setup desktop wallpaper
+- System Settings > Wallpaper, then add 'Unsplashed' folder from Photos and set to auto-rotate
   
 14. Setup dev environment
 

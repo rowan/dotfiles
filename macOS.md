@@ -111,6 +111,12 @@ Chrome:
 - Setup sync, to install extensions etc
 - Delete the default user profile
 
+12. Install fonts
+
+- Open FontBook
+- File > Add Fonts to current user...
+- Fonts are in the Dropbox under Team/Design
+  
 12. Setup Applications
 
 - Asana

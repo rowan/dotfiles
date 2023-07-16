@@ -98,8 +98,13 @@ Then, import old mail archives...
 - Unselect 'Show Birthdays Calendar' and 'Show Holidays Calendar' (these are managed via Google Calendar)
 - Turn on Timezone support (under Advanced)
 
-11. Setup Chrome browser
+11. Setup browsers
 
+Safari:
+- Settings > Autofill, untick "Usernames and passwords"
+- Settings > Websites > Location, set google.com (and others?) to "Deny"
+  
+Chrome:
 - Open Chrome - don't set as default!
 - Add a new user profile (click on the profile icon in toolbar, and choose add profile)
 - Sign into Google account

@@ -103,6 +103,7 @@ Then, import old mail archives...
 Safari:
 - Settings > Autofill, untick "Usernames and passwords"
 - Settings > Websites > Location, set google.com (and others?) to "Deny"
+- Settings > Extensions, enable all 1Blocker extensions (these are turned on/off using the 1Blocker app)
   
 Chrome:
 - Open Chrome - don't set as default!

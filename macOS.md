@@ -118,7 +118,7 @@ Chrome:
 - File > Add Fonts to current user...
 - Fonts are in the Dropbox under Team/Design
   
-12. Setup Applications
+13. Setup Applications
 
 - Asana
 - Loom
@@ -140,13 +140,13 @@ Then...
 - System Settings > Login items
 - Delete Loom
 
-13. Install Microsoft Office
+14. Install Microsoft Office
 
 - Login at microsoft.com
 - Services & Subscriptions > Office
 - Install
   
-13. Other settings
+15. Other settings
 
 Don't automatically connect to bluetooth headphones:
 - System Settings > Bluetooth, then disable auto-connect for AirPods (click the 'i' next to select item, then 'When last connected')
@@ -160,7 +160,7 @@ Turn off force tap to lookup in dictionary
 Setup desktop wallpaper
 - System Settings > Wallpaper, then add 'Unsplashed' folder from Photos and set to auto-rotate
   
-14. Setup dev environment
+16. Setup dev environment
 
 - Open `Github Desktop`
 - Sign in
@@ -187,21 +187,30 @@ _TO BE COMPLETED_
 - Config Xcode to open using Rosetta?
 - Setup AppleID (Xcode > Settings > Accounts)
 
-15. Setup Postico
+17. Setup Postico
 
 - Import favourites from ~/.dotfiles/apps/postico
 
-16. Setup VS Code
+18. Setup VS Code
 
 - Code > Settings > Turn on settings sync
 - Sign in with Github, this will sync settings and extensions across devices
 
-17. Setup Printers
+19. Setup RapidAPI 
+
+- Sign-in to RapidAPI for Mac (use Google account)
+- Settings + change icon
+
+20. Setup Sketch
+
+- Sign-in to Sketch Cloud    
+
+21. Setup Printers
 
 - System Settings > Printers & Scanners
 - Press "+" and choose printers to install
 
-18. Setup Influx (optional)
+22. Setup Influx (optional)
 
 To backup:
 `influx backup -compression gzip ./ -t [token]`
@@ -215,6 +224,6 @@ This assumes the backup files are in the current working directory.
 
 Note: substitute [token] with an API token 
 
-19. Setup Plex (optional)
+23. Setup Plex (optional)
 
 _TO BE COMPLETED_

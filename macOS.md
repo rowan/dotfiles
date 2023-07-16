@@ -80,18 +80,17 @@ See [README.md]
 - Viewing > List Preview: None, also tick 'Display unread messages with bold font' and 'Use Smart Addresses'
 - Composing > Send new messages from: rowan@hoku.nz
 
-Then...
+Then, setup keyboard shortcut for archive...
 
 - System Settings > Keyboard > Shortcuts
 - Add a new shortcut for Mail, Menu Title: "Archive", Keyboard Shortcur Cmd-Shift-A
 
-Then...
+Then, import old mail archives...
 
-- Import Trade Me + Xero mbox archives
-(these are currently on the NAS: Backup/Laptop/Laptop 2013-12-21 17.45/Public/Keep/Import)
-
-_TODO: ADD BETTER INSTRUCTIONS FOR THIS IMPORT_
-_TODO: THESE FILES SHOULD BE KEPT SOMEWHERE MORE OBVIOUS/SAFER_
+- Copy Trade Me + Xero mbox archives from the NAS: Backup/Email/
+- File > Import mailboxs...
+- Choose 'Files in mbox format' and 'Continue'
+- Select copied folders
 
 10. Setup Calendar Preferences
 
@@ -99,14 +98,26 @@ _TODO: THESE FILES SHOULD BE KEPT SOMEWHERE MORE OBVIOUS/SAFER_
 - Unselect 'Show Birthdays Calendar' and 'Show Holidays Calendar' (these are managed via Google Calendar)
 - Turn on Timezone support (under Advanced)
 
-11. Setup Chrome browser
+11. Setup browsers
 
+Safari:
+- Settings > Autofill, untick "Usernames and passwords"
+- Settings > Websites > Location, set google.com (and others?) to "Deny"
+- Settings > Extensions, enable all 1Blocker extensions (these are turned on/off using the 1Blocker app)
+  
+Chrome:
 - Open Chrome - don't set as default!
 - Add a new user profile (click on the profile icon in toolbar, and choose add profile)
 - Sign into Google account
 - Setup sync, to install extensions etc
 - Delete the default user profile
 
+12. Install fonts
+
+- Open FontBook
+- File > Add Fonts to current user...
+- Fonts are in the Dropbox under Team/Design
+  
 12. Setup Applications
 
 - Asana
@@ -142,6 +153,12 @@ Don't automatically connect to bluetooth headphones:
 
 Change the default location where screenshots are stored:
 - Applications > Screenshot, then Options > Other location... (choose 'Screenshots' directory on personal Dropbox)
+
+Turn off force tap to lookup in dictionary
+- System Settings > Trackpad, then set Lookup & data detectors to 'Off')
+
+Setup desktop wallpaper
+- System Settings > Wallpaper, then add 'Unsplashed' folder from Photos and set to auto-rotate
   
 14. Setup dev environment
 

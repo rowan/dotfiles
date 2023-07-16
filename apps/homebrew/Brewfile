@@ -36,6 +36,7 @@ cask 'asana'
 cask 'calibre'
 cask 'docker'
 cask 'dropbox'
+cask 'firefox'
 cask 'github'
 cask 'google-chrome'
 cask 'launchcontrol'
@@ -45,10 +46,12 @@ cask 'microsoft-teams'
 cask 'notion'
 cask 'pastebot'
 cask 'paw'
+cask 'rapidapi'
 cask 'sf-symbols'
 cask 'sketch'
 # cask 'slack' - this now installed from Mac App Store
 cask 'sonos'
+cask 'trader-workstation'
 cask 'vlc'
 cask 'visual-studio-code'
 cask 'zoom'
@@ -58,5 +61,6 @@ mas "Pixelmator Pro", id: 1289583905
 mas "Postico", id: 1031280567
 mas "DaisyDisk", id: 411643860
 mas "XCode", id: 497799835
+mas "Save to Pocket", id: 1477385213
 mas "Slack for Desktop", id: 803453959
 mas "Bumpr", id: 1166066070

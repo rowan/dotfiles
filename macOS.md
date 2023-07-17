@@ -205,6 +205,14 @@ _TO BE COMPLETED_
 
 - Sign-in to Sketch Cloud    
 
+21. Setup Pastebot
+
+- Open Pastebot, and enter license key (from 1Password)
+- Setup accessibility settings per instructions
+- Click on Pastebot icon in taskbar, and then settings...
+- General - untick "Enable interaction sounds"
+- General > Dock and Menubar icon - change to "Autohide Dock icon"
+  
 21. Setup Printers
 
 - System Settings > Printers & Scanners

@@ -14,7 +14,7 @@ com.apple.AppleMultitouchTrackpad:
 
 # Dock- show on the right
 com.apple.dock:
-  orientation: "right"
+#  orientation: "right"
   autohide: false
 
 # Finder - don't show volumes on desktop
@@ -22,8 +22,8 @@ com.apple.finder:
   ShowHardDrivesOnDesktop: false
   ShowExternalHardDrivesOnDesktop: false
   ShowRemovableMediaOnDesktop: false
-  FXPreferredViewStyle: "clmv"
-  EmptyTrashSecurely: true
+#  FXPreferredViewStyle: "clmv"
+#  EmptyTrashSecurely: true
 
 # Don't create .DS_Store files on network or USB volumes
 com.apple.desktopservices:
@@ -39,18 +39,18 @@ com.apple.ImageCapture:
   disableHotPlug: true
 
 # Safari - set up development.
-com.apple.Safari.SandboxBroker:
-  ShowDevelopMenu: true
+# com.apple.Safari.SandboxBroker:
+#   ShowDevelopMenu: true
 com.apple.Safari:
   AutoFillPasswords: false
   AlwaysRestoreSessionAtLaunch: 1
   HomePage: "https://hoku.nz/"
-  IncludeDevelopMenu: true
-  IncludeInternalDebugMenu: true
-  WebKitDeveloperExtrasEnabledPreferenceKey: true
-  "com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled": true
-NSGlobalDomain:
-  WebKitDeveloperExtras: true
+#  IncludeDevelopMenu: true
+#  IncludeInternalDebugMenu: true
+#  WebKitDeveloperExtrasEnabledPreferenceKey: true
+#  "com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled": true
+#NSGlobalDomain:
+#  WebKitDeveloperExtras: true
 # note: for these to work we need to first grant "Full Disk Access" permission to terminal - see
 
 # Calendar

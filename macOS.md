@@ -6,9 +6,9 @@ E.g. Mini/mini, or Studio/studio
 
 1. Update the location of the home directory created during install
 
-- System Preferences > Users & Groups
-- Click the lock to allow changes
+- System Settings > Users & Groups
 - Right click on default user account (this should be named to match the machine - e.g. "Mini"), and select `Advanced Options...`
+- Enter password to allow changes
 - Update the home directory to be `Temp`
 - Restart (this will ask you to reconfig macOS settings, which you can skip)
 - Using Finder, rename `/Users/[name]` to use the capitalised name
@@ -20,40 +20,58 @@ The home folder should now reference the capitalised version.
 
 2. Update sharing settings
 
-- System Preferences > Sharing
+- System Settings > Sharing
 - Change the Computer Name
 - Click `Edit...` to update the LAN name
 
 Then... (optional)
 
-- Select 'Screen Sharing' from the menu
+- Select "Screen Sharing" from the menu
 
 3. Run the `dotfiles` install + update 
 
 See [README.md]
 
-4. Setup 1Password
+4. Check iCloud settings
 
-- Master Password
-- TouchID
-- Apple Watch?
-- Add Chrome extension
+- System Settings > AppleID > iCloud
+- Under "Apps using iCloud" ...
+- Confirm Photos, Contact, Calendars, Reminders and Find My Mac are all turned on
 
-5. Setup Finder
+5. Setup 1Password
 
-- Finder > Preferences
+- Open 1Password app
+- Choose the correct Hoku Group account and enter master password
+- Follow instructions to install Safari browser extension
+- Settings > Security, to add Touch ID unlock
+
+6. Setup Dropbox
+
+- Open Dropbox app
+- Click the "Turn On Accessibility" button on the pop-up window
+- Sign-in to Hoku account (use email address + password, rather than Google login button)
+- Choose "Available offline" for sync storage
+- Sign-in to personal account
+- Choose "Available offline" for sync storage
+- Setup Selective Sync (optional)
+  
+7. Setup Finder
+
+- Finder > Settings
 - General > Set New Finder Window to show home directory
 - Sidebar > Add home directory (can then drag and drop other folders onto the favourites in sidebar e.g. add Dropbox folders)
 - Advances > Select 'Remove items from the Bin after 30 days'
 
-6. Setup Internet Accounts
+8. Setup Internet Accounts
 
-- System Preferences > Internet Accounts
+- System Settings > Internet Accounts
 - Should list all accounts linked to iCloud account as inactive
 - For Google accounts, 'Mail' and 'Calendar' should be ticked (need to authenticate when selecting 'Mail')
 - For iCloud accounts all options should be ticked
 
-7. Setup Mail Preferences
+9. Setup Mail
+   
+- Mail > Settings...
 - New Message Sound: None (also untick 'Play sounds for other mail actions')
 - Remove Unedited Downloads: When Mail Quits
 - Select 'Automatically try sending later...'
@@ -62,20 +80,48 @@ See [README.md]
 - Viewing > List Preview: None, also tick 'Display unread messages with bold font' and 'Use Smart Addresses'
 - Composing > Send new messages from: rowan@hoku.nz
 
-Then...
+Then, setup keyboard shortcut for archive...
 
-- System Preferences > Keyboard > Shortcuts
+- System Settings > Keyboard > Shortcuts
 - Add a new shortcut for Mail, Menu Title: "Archive", Keyboard Shortcur Cmd-Shift-A
 
-8. Setup Calendar Preferences:
+Then, import old mail archives...
+
+- Copy Trade Me + Xero mbox archives from the NAS: Backup/Email/
+- File > Import mailboxs...
+- Choose 'Files in mbox format' and 'Continue'
+- Select copied folders
+
+10. Setup Calendar Preferences
+
 - Select default calendar
 - Unselect 'Show Birthdays Calendar' and 'Show Holidays Calendar' (these are managed via Google Calendar)
 - Turn on Timezone support (under Advanced)
 
-9. Setup Applications
+11. Setup browsers
+
+Safari:
+- Settings > Autofill, untick "Usernames and passwords"
+- Settings > Websites > Location, set google.com (and others?) to "Deny"
+- Settings > Extensions, enable all 1Blocker extensions (these are turned on/off using the 1Blocker app)
+  
+Chrome:
+- Open Chrome - don't set as default!
+- Add a new user profile (click on the profile icon in toolbar, and choose add profile)
+- Sign into Google account
+- Setup sync, to install extensions etc
+- Delete the default user profile
+
+12. Install fonts
+
+- Open FontBook
+- File > Add Fonts to current user...
+- Fonts are in the Dropbox under Team/Design
+  
+13. Setup Applications
 
 - Asana
-- Dropbox
+- Loom
 - Notion
 - Slack
 - Zoom
@@ -84,11 +130,37 @@ Then...
 
 Setup Accessibility permissions for Dropbox and Zoom:
 
-- System Preferences > Security & Privacy ...
+- System Settings > Security & Privacy ...
 - Privacy, then allow Dropbox and Zoom
-- Camera & Microphone, allow Zoom
+- Camera & Microphone, allow Loom and Zoom
+- Screen Recording, allow Loom, Slack and Zoom
 
-10. Setup dev environment
+Then...
+
+- System Settings > Login items
+- Delete Loom
+
+14. Install Microsoft Office
+
+- Login at microsoft.com
+- Services & Subscriptions > Office
+- Install
+  
+15. Other settings
+
+Don't automatically connect to bluetooth headphones:
+- System Settings > Bluetooth, then disable auto-connect for AirPods (click the 'i' next to select item, then 'When last connected')
+
+Change the default location where screenshots are stored:
+- Applications > Screenshot, then Options > Other location... (choose 'Screenshots' directory on personal Dropbox)
+
+Turn off force tap to lookup in dictionary
+- System Settings > Trackpad, then set Lookup & data detectors to 'Off')
+
+Setup desktop wallpaper
+- System Settings > Wallpaper, then add 'Unsplashed' folder from Photos and set to auto-rotate
+  
+16. Setup dev environment
 
 - Open `Github Desktop`
 - Sign in
@@ -113,27 +185,40 @@ For rails applications...
 For xcode applications...
 _TO BE COMPLETED_
 - Config Xcode to open using Rosetta?
-- Setup AppleID (Xcode > Preferences > Accounts)
+- Setup AppleID (Xcode > Settings > Accounts)
 
-11. Setup `Postico`
+17. Setup Postico
 
 - Import favourites from ~/.dotfiles/apps/postico
 
-12. Setup `VS Code`
+18. Setup VS Code
 
-_TO BE COMPLETED_
+- Code > Settings > Turn on settings sync
+- Sign in with Github, this will sync settings and extensions across devices
 
-- Install `Visual Studio Code` plugins
-TODO: are these saved in a preferences file somewhere?
+19. Setup RapidAPI 
 
-- Right click on Explorer and select "Open Editors" to view summary of currently open files
+- Sign-in to RapidAPI for Mac (use Google account)
+- Settings + change icon
 
-13. Setup `Printers`
+20. Setup Sketch
 
-- System Preferences > Printers & Scanners
+- Sign-in to Sketch Cloud    
+
+21. Setup Pastebot
+
+- Open Pastebot, and enter license key (from 1Password)
+- Setup accessibility settings per instructions
+- Click on Pastebot icon in taskbar, and then settings...
+- General - untick "Enable interaction sounds"
+- General > Dock and Menubar icon - change to "Autohide Dock icon"
+  
+21. Setup Printers
+
+- System Settings > Printers & Scanners
 - Press "+" and choose printers to install
 
-14. Setup `Influx` (optional)
+22. Setup Influx (optional)
 
 To backup:
 `influx backup -compression gzip ./ -t [token]`
@@ -147,6 +232,6 @@ This assumes the backup files are in the current working directory.
 
 Note: substitute [token] with an API token 
 
-15. Setup `Plex` (optional)
+23. Setup Plex (optional)
 
 _TO BE COMPLETED_

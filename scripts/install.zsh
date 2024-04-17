@@ -19,7 +19,7 @@ source "$DOTFILES/scripts/terminal.zsh"
 
 # setup full disk access for terminal
 echo "Please enable 'Full Disk Access' permission for Terminal in System Preferences"
-open "x-apple.systempreferences:com.apple.preference.security?Privacy"
+# open "x-apple.systempreferences:com.apple.preference.security?Privacy"
 
 # prompt to reboot terminal and run update scripts
 echo "✅ Initial install complete - please restart terminal and run 'dot'"

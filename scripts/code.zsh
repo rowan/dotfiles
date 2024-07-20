@@ -7,6 +7,9 @@ vared -c -p "✋ What version of ruby to install? " ruby_version
 rbenv install $ruby_version
 rbenv global $ruby_version
 
+# start postgres
+brew services start postgresql
+
 # RowanWeb
 
 if [ ! -d "$PROJECTS/RowanWeb" ]

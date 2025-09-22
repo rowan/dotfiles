@@ -9,9 +9,14 @@ echo "▶️  Setup dotfiles"
 export DOTFILES=$HOME/.dotfiles
 echo "DOTFILES = ${DOTFILES}"
 
-# install rosetta
-echo "▶️  Install rosetta"
-softwareupdate --install-rosetta --agree-to-license
+# install claude-code
+echo "▶️  Install claude-code"
+if ! command -v claude-code &> /dev/null; then
+    echo "Installing claude-code..."
+    curl -fsSL https://claude.ai/install.sh | bash
+else
+    echo "claude-code already installed"
+fi
 
 # setup terminal
 echo "▶️  Setup terminal"

@@ -37,15 +37,12 @@ cask 'audacity'
 cask 'calibre'
 cask 'canva'
 cask 'chronosync'
-cask 'cursor'
 # cask 'docker'  # Removed - not used in production
 cask 'dropbox'
-cask 'dropbox-capture'
 cask 'firefox'
 cask 'github'
 cask 'google-chrome'
 cask 'launchcontrol'
-# cask 'mactex'
 cask 'macwhisper'
 cask 'microsoft-teams'
 cask 'notion'
@@ -53,7 +50,7 @@ cask 'pastebot'
 cask 'rapidapi'
 cask 'sf-symbols'
 cask 'sketch'
-# cask 'slack' - this now installed from Mac App Store
+# cask 'slack' # Removed - now installed from Mac App Store
 cask 'sonos'
 cask 'trader-workstation'
 cask 'vlc'
@@ -61,10 +58,11 @@ cask 'visual-studio-code'
 cask 'zoom'
 
 mas "1Blocker", id: 1365531024
+mas "Instapaper", id: 288545208
+mas "Mp3tag", id: 1532597159
 mas "Pixelmator Pro", id: 1289583905
 mas "Postico", id: 1031280567
 mas "DaisyDisk", id: 411643860
 mas "XCode", id: 497799835
-mas "Save to Pocket", id: 1477385213
 mas "Slack for Desktop", id: 803453959
 mas "Bumpr", id: 1166066070

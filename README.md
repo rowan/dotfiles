@@ -35,7 +35,7 @@ This should now be running with new theme and with modified path, prompt etc.
 
 Note: initially several of the files that are run when the terminal is started will fail, as dependencies such as `yarn` and `rbenv` have not been installed yet.
 
-## update 
+## update
 
 To update an existing environment:
 
@@ -50,9 +50,16 @@ This uses the **update** script:
 This:
 
 - Sets macOS defaults
-- Runs **homebrew** (including Mac App Store usung `mas`)
+- Runs **homebrew** (including Mac App Store using `mas`)
+- Cleans up deprecated Homebrew taps
 - Runs **app/\*\*/install.zsh** scripts
 - Updates macOS
+
+### Additional dot command options:
+
+- `dot -u` or `dot --upgrade` - Also upgrades all Homebrew packages after update
+- `dot -e` or `dot --edit` - Opens dotfiles directory in your editor
+- `dot -h` or `dot --help` - Shows help message
 
 ---
 

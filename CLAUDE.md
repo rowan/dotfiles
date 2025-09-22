@@ -19,8 +19,17 @@ source scripts/install.zsh
 # Primary update command - runs all update scripts
 dot
 
+# Update dotfiles AND upgrade all Homebrew packages
+dot --upgrade
+
 # Edit dotfiles
 dot --edit
+
+# Manually update all Homebrew packages
+brew upgrade
+
+# List outdated packages
+brew outdated
 ```
 
 ### Manual Script Execution
@@ -36,6 +45,9 @@ source scripts/apps.zsh
 
 # Setup terminal configuration
 source scripts/terminal.zsh
+
+# One-time cleanup for known issues (run as needed)
+source scripts/cleanup.zsh
 ```
 
 ## Architecture

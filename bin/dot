@@ -13,10 +13,14 @@ display_help() {
 	echo "Usage: dot [options]"
 	echo ""
 	echo "Options:"
-	echo "  -e, --edit    Open dotfiles directory for editing"
-	echo "  -h, --help    Show this help message and exit"
+	echo "  -e, --edit       Open dotfiles directory for editing"
+	echo "  -u, --upgrade    Also upgrade all Homebrew packages after update"
+	echo "  -h, --help       Show this help message and exit"
 	exit
 }
+
+# Track if we should upgrade packages
+UPGRADE_PACKAGES=false
 
 # If there is a parameter passed open files for editing or show help text
 while test $# -gt 0; do
@@ -28,6 +32,9 @@ while test $# -gt 0; do
 			exec "$EDITOR" "$DOTFILES"
 			exit
 			;;
+		"-u"|"--upgrade")
+			UPGRADE_PACKAGES=true
+			;;
 		*)
 			echo "Invalid option: $1"
 			display_help
@@ -38,3 +45,11 @@ done
 
 # Otherwise, let's update...
 zsh $DOTFILES/scripts/update.zsh
+
+# If upgrade flag was passed, also upgrade brew packages
+if [ "$UPGRADE_PACKAGES" = true ]; then
+	echo ""
+	echo "▶️  Upgrading Homebrew packages"
+	brew upgrade
+	echo "Done"
+fi

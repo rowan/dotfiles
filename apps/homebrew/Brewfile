@@ -38,7 +38,7 @@ cask 'calibre'
 cask 'canva'
 cask 'chronosync'
 cask 'cursor'
-cask 'docker'
+# cask 'docker'  # Removed - not used in production
 cask 'dropbox'
 cask 'dropbox-capture'
 cask 'firefox'

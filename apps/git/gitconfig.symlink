@@ -38,3 +38,12 @@
 	clean = git-lfs clean -- %f
 [init]
 	defaultBranch = main
+[user]
+        name = rowan
+        email = rowan@hoku.nz
+[credential "https://github.com"]
+	helper = 
+	helper = !/opt/homebrew/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper = 
+	helper = !/opt/homebrew/bin/gh auth git-credential

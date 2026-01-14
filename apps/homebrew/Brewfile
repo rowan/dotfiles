@@ -25,6 +25,7 @@ brew 'readline'
 brew 'ruby-build'
 brew 'rbenv'
 brew 'telnet'
+brew 'tmux'
 brew 'unar'
 brew 'vips'
 brew 'wget'
@@ -52,12 +53,14 @@ cask 'sf-symbols'
 cask 'sketch'
 # cask 'slack' # Removed - now installed from Mac App Store
 cask 'sonos'
+cask 'tailscale'
 cask 'trader-workstation'
 cask 'vlc'
 cask 'visual-studio-code'
 cask 'zoom'
 
 mas "1Blocker", id: 1365531024
+mas "Amphetamine", id: 937984704
 mas "Instapaper", id: 288545208
 mas "Mp3tag", id: 1532597159
 mas "Pixelmator Pro", id: 1289583905

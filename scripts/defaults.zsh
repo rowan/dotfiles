@@ -4,7 +4,17 @@
 osascript -e 'quit app "Safari"'
 
 # Apply defaults
-apply-user-defaults apps/system/user-defaults.yaml --verbose
+# Note: Safari settings require "Full Disk Access" for Terminal in
+# System Settings > Privacy & Security > Full Disk Access
+echo "ℹ️  If Safari settings fail, grant Terminal 'Full Disk Access' in System Settings"
+if ! apply-user-defaults apps/system/user-defaults.yaml --verbose; then
+  echo ""
+  echo "⚠️  Some defaults failed to apply."
+  echo "   Safari settings require 'Full Disk Access' for Terminal:"
+  echo "   System Settings > Privacy & Security > Full Disk Access"
+  echo "   Add Terminal.app, then re-run 'dot'"
+  echo ""
+fi
 
 # Populate dock
 # note: first item below resets existing array settings, others are added to the array

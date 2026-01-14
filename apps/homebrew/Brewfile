@@ -53,7 +53,7 @@ cask 'sf-symbols'
 cask 'sketch'
 # cask 'slack' # Removed - now installed from Mac App Store
 cask 'sonos'
-cask 'tailscale'
+cask 'tailscale-app'
 cask 'trader-workstation'
 cask 'vlc'
 cask 'visual-studio-code'

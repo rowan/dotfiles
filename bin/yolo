@@ -1,0 +1,12 @@
+#!/bin/bash
+# Start Claude in current directory with --continue if conversation exists
+
+project_path="$(pwd)"
+encoded_path=$(echo "$project_path" | sed 's/\//-/g')
+conv_dir="$HOME/.claude/projects/$encoded_path"
+
+if [[ -d "$conv_dir" ]] && find "$conv_dir" -maxdepth 1 -name "*.md" ! -name "*agent*" 2>/dev/null | grep -q .; then
+    exec claude --dangerously-skip-permissions --continue
+else
+    exec claude --dangerously-skip-permissions
+fi

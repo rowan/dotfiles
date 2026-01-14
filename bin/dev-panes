@@ -1,0 +1,4 @@
+#!/bin/bash
+# Laptop layout: standard scroll behavior
+tmux set -g mouse on
+echo "Laptop layout active (standard scroll)"

@@ -1,0 +1,34 @@
+#!/bin/bash
+set -e
+
+CODE_DIR="${PROJECTS:-$HOME/Documents/Code}"
+SESSION="dev"
+
+# Kill existing session if running
+tmux kill-session -t $SESSION 2>/dev/null || true
+
+# Get all project directories (only directories, not files)
+projects=()
+for d in "$CODE_DIR"/*/; do
+    [[ -d "$d" ]] && projects+=("$(basename "$d")")
+done
+
+if [[ ${#projects[@]} -eq 0 ]]; then
+    echo "No project directories found in $CODE_DIR"
+    exit 1
+fi
+
+# Create session with first project
+first_project="${projects[0]}"
+tmux new-session -d -s $SESSION -n "$first_project" -c "$CODE_DIR/$first_project"
+
+# Create windows for remaining projects
+for project in "${projects[@]:1}"; do
+    tmux new-window -t $SESSION -n "$project" -c "$CODE_DIR/$project"
+done
+
+# Select first window
+tmux select-window -t "$SESSION:1"
+
+# Attach to session
+tmux attach -t $SESSION

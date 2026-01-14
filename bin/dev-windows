@@ -1,0 +1,4 @@
+#!/bin/bash
+# Mobile-friendly: inverted scroll for touch devices
+tmux set -g mouse on
+echo "Mobile layout active (ensure Termius scroll inversion is enabled)"

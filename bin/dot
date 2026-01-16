@@ -51,5 +51,8 @@ if [ "$UPGRADE_PACKAGES" = true ]; then
 	echo ""
 	echo "▶️  Upgrading Homebrew packages"
 	brew upgrade
+	echo ""
+	echo "▶️  Cleaning up Homebrew cache"
+	brew cleanup -s
 	echo "Done"
 fi

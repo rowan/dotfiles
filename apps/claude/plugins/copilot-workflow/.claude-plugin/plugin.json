@@ -1,0 +1,8 @@
+{
+  "name": "copilot-workflow",
+  "version": "1.0.0",
+  "description": "Apply GitHub Copilot review feedback via Claude Code",
+  "author": {
+    "name": "Rowan Simpson"
+  }
+}

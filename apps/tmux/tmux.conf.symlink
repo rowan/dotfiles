@@ -32,8 +32,8 @@ bind-key -n M-8 select-window -t 8
 bind-key -n M-9 select-window -t 9
 
 # Layout shortcuts
-bind-key P run-shell "~/bin/dev-panes"
-bind-key W run-shell "~/bin/dev-windows"
+bind-key P run-shell "~/.dotfiles/bin/dev-panes"
+bind-key W run-shell "~/.dotfiles/bin/dev-windows"
 
 # Renumber windows when one is closed
 set -g renumber-windows on

@@ -20,8 +20,9 @@ echo "Linked \033[00;34m$SOURCE\033[0m to \033[00;34m$CLAUDE_MD\033[0m"
 claude plugin install frontend-design@claude-plugins-official
 claude plugin install pr-review-toolkit@claude-plugins-official
 
-# Install custom skills
+# Install custom skills (symlink to keep in sync with dotfiles)
 SKILLS_DIR="$HOME/.claude/skills"
-mkdir -p "$SKILLS_DIR"
-cp -r "$DOTFILES/apps/claude/skills/"* "$SKILLS_DIR/"
-echo "Installed custom skills to \033[00;34m$SKILLS_DIR\033[0m"
+SOURCE_SKILLS_DIR="$DOTFILES/apps/claude/skills"
+rm -rf "$SKILLS_DIR"
+ln -s "$SOURCE_SKILLS_DIR" "$SKILLS_DIR"
+echo "Linked \033[00;34m$SOURCE_SKILLS_DIR\033[0m to \033[00;34m$SKILLS_DIR\033[0m"

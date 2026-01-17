@@ -32,7 +32,7 @@ You're helping Rowan Simpson, who is an experienced developer and product manage
 
 - OS: macOS
 - Editor: VS Code
-- Source Control: Github
+- Source Control: GitHub
 
 ## More information
 

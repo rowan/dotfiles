@@ -12,17 +12,36 @@ mkdir -p "$CLAUDE_DIR"
 rm -f "$CLAUDE_MD"
 
 # Create symlink
-ln -s "$SOURCE" "$CLAUDE_MD"
-
-echo "Linked \033[00;34m$SOURCE\033[0m to \033[00;34m$CLAUDE_MD\033[0m"
+if ln -s "$SOURCE" "$CLAUDE_MD"; then
+    echo "Linked \033[00;34m$SOURCE\033[0m to \033[00;34m$CLAUDE_MD\033[0m"
+else
+    echo "\033[00;31mFailed to create symlink: $CLAUDE_MD\033[0m"
+fi
 
 # Install Claude Code plugins (official)
-claude plugin install frontend-design@claude-plugins-official
-claude plugin install pr-review-toolkit@claude-plugins-official
+if command -v claude &> /dev/null; then
+    for plugin in "frontend-design@claude-plugins-official" "pr-review-toolkit@claude-plugins-official"; do
+        if claude plugin install "$plugin" 2>&1; then
+            echo "Installed plugin: $plugin"
+        else
+            echo "\033[00;33mWarning: Failed to install plugin: $plugin\033[0m"
+        fi
+    done
+else
+    echo "\033[00;33mWarning: claude CLI not found, skipping plugin installation\033[0m"
+fi
 
 # Install custom skills (symlink to keep in sync with dotfiles)
 SKILLS_DIR="$HOME/.claude/skills"
 SOURCE_SKILLS_DIR="$DOTFILES/apps/claude/skills"
-rm -rf "$SKILLS_DIR"
-ln -s "$SOURCE_SKILLS_DIR" "$SKILLS_DIR"
-echo "Linked \033[00;34m$SOURCE_SKILLS_DIR\033[0m to \033[00;34m$SKILLS_DIR\033[0m"
+
+if [[ ! -d "$SOURCE_SKILLS_DIR" ]]; then
+    echo "\033[00;33mWarning: Source skills directory not found: $SOURCE_SKILLS_DIR\033[0m"
+else
+    rm -rf "$SKILLS_DIR"
+    if ln -s "$SOURCE_SKILLS_DIR" "$SKILLS_DIR"; then
+        echo "Linked \033[00;34m$SOURCE_SKILLS_DIR\033[0m to \033[00;34m$SKILLS_DIR\033[0m"
+    else
+        echo "\033[00;31mFailed to create symlink: $SKILLS_DIR\033[0m"
+    fi
+fi

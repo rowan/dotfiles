@@ -16,11 +16,12 @@ bind-key -T copy-mode-vi y send-keys -X copy-pipe-and-cancel "pbcopy"
 # Increase scrollback
 set -g history-limit 50000
 
-# Start windows at 1 (easier keyboard nav)
-set -g base-index 1
-setw -g pane-base-index 1
+# Start windows at 0 (staging window)
+set -g base-index 0
+setw -g pane-base-index 0
 
 # Quick window switching (Alt+number)
+bind-key -n M-0 select-window -t 0
 bind-key -n M-1 select-window -t 1
 bind-key -n M-2 select-window -t 2
 bind-key -n M-3 select-window -t 3

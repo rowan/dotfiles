@@ -3,14 +3,15 @@ set -e
 
 CODE_DIR="${PROJECTS:-$HOME/Documents/Code}"
 SESSION="dev"
-CONFIG_FILE="$HOME/.config/tmux-projects"
+CONFIG_FILE="$CODE_DIR/.tmux-projects"
 MAX_TABS=9
 
 # Default projects for new config file
 DEFAULT_PROJECTS="Hive
 HoddyRoad
-MailTriage
-HokuWeb"
+HoddyRoadAPI
+HokuWeb
+MailTriage"
 
 show_help() {
     echo "Usage: start-tmux [OPTIONS]"

@@ -7,7 +7,8 @@ CONFIG_FILE="$CODE_DIR/.tmux-projects"
 MAX_TABS=9
 
 # Default projects for new config file
-DEFAULT_PROJECTS="Hive
+DEFAULT_PROJECTS="Dunbar
+Hive
 HoddyRoad
 HoddyRoadAPI
 HokuWeb

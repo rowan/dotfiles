@@ -9,8 +9,10 @@ fi
 
 # Auto-attach to tmux on SSH login
 if [[ -n "$SSH_CONNECTION" ]] && [[ -z "$TMUX" ]]; then
-    # Attach to existing session or start new one
-    tmux attach -t dev 2>/dev/null || start-tmux
+    if command -v tmux &>/dev/null; then
+        # Attach to existing session or start new one
+        tmux attach -t dev 2>/dev/null || start-tmux
+    fi
 fi
 
 # Aliases

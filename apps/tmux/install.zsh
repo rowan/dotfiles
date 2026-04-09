@@ -36,8 +36,12 @@ if [[ -f "$OLD_CONFIG" ]] && [[ ! -f "$CONFIG_FILE" ]]; then
         [[ -z "$project" || "$project" =~ ^# ]] && continue
         echo "~/Documents/Code/$project" >> "$CONFIG_FILE"
     done < "$OLD_CONFIG"
-    rm "$OLD_CONFIG"
-    echo "Migrated tmux projects config to $CONFIG_FILE"
+    if [[ -s "$CONFIG_FILE" ]]; then
+        rm "$OLD_CONFIG"
+        echo "Migrated tmux projects config to $CONFIG_FILE"
+    else
+        echo "Warning: Migration may have failed - keeping old config at $OLD_CONFIG"
+    fi
 elif [[ ! -f "$CONFIG_FILE" ]]; then
     # Copy default from repo
     cp "$DEFAULT_FILE" "$CONFIG_FILE"

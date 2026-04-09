@@ -8,11 +8,14 @@ SOURCE="$DOTFILES/apps/claude/CLAUDE.md"
 # Ensure ~/.claude directory exists
 mkdir -p "$CLAUDE_DIR"
 
-# Remove existing file/symlink if present
-rm -f "$CLAUDE_MD"
-
-# Create symlink
-if ln -s "$SOURCE" "$CLAUDE_MD"; then
+# Create symlink (preserve existing user config)
+if [[ -L "$CLAUDE_MD" ]] && [[ "$(readlink "$CLAUDE_MD")" == "$SOURCE" ]]; then
+    # Already correctly symlinked
+    :
+elif [[ -e "$CLAUDE_MD" ]] && [[ ! -L "$CLAUDE_MD" ]]; then
+    # Real file exists - don't overwrite the user's config
+    echo "Keeping existing $CLAUDE_MD (not a symlink)"
+elif ln -s "$SOURCE" "$CLAUDE_MD"; then
     echo "Linked \033[00;34m$SOURCE\033[0m to \033[00;34m$CLAUDE_MD\033[0m"
 else
     echo "\033[00;31mFailed to create symlink: $CLAUDE_MD\033[0m"
@@ -38,7 +41,15 @@ SOURCE_SKILLS_DIR="$DOTFILES/apps/claude/skills"
 if [[ ! -d "$SOURCE_SKILLS_DIR" ]]; then
     echo "\033[00;33mWarning: Source skills directory not found: $SOURCE_SKILLS_DIR\033[0m"
 else
-    rm -rf "$SKILLS_DIR"
+    if [[ -L "$SKILLS_DIR" ]] && [[ "$(readlink "$SKILLS_DIR")" == "$SOURCE_SKILLS_DIR" ]]; then
+        # Already correctly symlinked
+        :
+    elif [[ -d "$SKILLS_DIR" ]] && [[ ! -L "$SKILLS_DIR" ]]; then
+        mv "$SKILLS_DIR" "${SKILLS_DIR}.backup.$(date +%s)"
+        echo "Backed up existing skills directory"
+    else
+        rm -f "$SKILLS_DIR"
+    fi
     if ln -s "$SOURCE_SKILLS_DIR" "$SKILLS_DIR"; then
         echo "Linked \033[00;34m$SOURCE_SKILLS_DIR\033[0m to \033[00;34m$SKILLS_DIR\033[0m"
     else

@@ -3,16 +3,8 @@ set -e
 
 CODE_DIR="${PROJECTS:-$HOME/Documents/Code}"
 SESSION="dev"
-CONFIG_FILE="$CODE_DIR/.tmux-projects"
+CONFIG_FILE="$HOME/.config/tmux/projects"
 MAX_TABS=9
-
-# Default projects for new config file
-DEFAULT_PROJECTS="Dunbar
-Hive
-HoddyRoad
-HoddyRoadAPI
-HokuWeb
-MailTriage"
 
 show_help() {
     echo "Usage: start-tmux [OPTIONS]"
@@ -23,8 +15,8 @@ show_help() {
     echo "  -a, --all     Open all directories in $CODE_DIR"
     echo "  -h, --help    Show this help message"
     echo ""
-    echo "By default, opens projects listed in $CONFIG_FILE (max $MAX_TABS)."
-    echo "Edit that file to customise which projects open."
+    echo "By default, opens projects listed in ~/.config/tmux/projects (max $MAX_TABS)."
+    echo "Each line should be a full path (~ is expanded). Tab name is the directory name."
 }
 
 # Parse arguments
@@ -47,52 +39,49 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-# Create default config if it doesn't exist
-if [[ ! -f "$CONFIG_FILE" ]]; then
-    mkdir -p "$(dirname "$CONFIG_FILE")"
-    echo "$DEFAULT_PROJECTS" > "$CONFIG_FILE"
-    echo "Created default config at $CONFIG_FILE"
-fi
-
-# Build project list
+# Build project list (stores full paths)
 projects=()
 
 if [[ "$USE_ALL" == true ]]; then
     # All directories in CODE_DIR
     for d in "$CODE_DIR"/*/; do
-        [[ -d "$d" ]] && projects+=("$(basename "$d")")
+        [[ -d "$d" ]] && projects+=("${d%/}")
     done
-else
-    # Read from config file, filter to existing directories, limit to MAX_TABS
-    while IFS= read -r project || [[ -n "$project" ]]; do
+elif [[ -f "$CONFIG_FILE" ]]; then
+    # Read full paths from config file, limit to MAX_TABS
+    while IFS= read -r line || [[ -n "$line" ]]; do
         # Skip empty lines and comments
-        [[ -z "$project" || "$project" =~ ^# ]] && continue
+        [[ -z "$line" || "$line" =~ ^# ]] && continue
+        # Expand ~ to $HOME
+        path="${line/#\~/$HOME}"
         # Only add if directory exists
-        if [[ -d "$CODE_DIR/$project" ]]; then
-            projects+=("$project")
+        if [[ -d "$path" ]]; then
+            projects+=("$path")
             # Stop at MAX_TABS
             [[ ${#projects[@]} -ge $MAX_TABS ]] && break
         else
-            echo "Warning: $project not found in $CODE_DIR, skipping"
+            echo "Warning: $path not found, skipping"
         fi
     done < "$CONFIG_FILE"
-fi
-
-if [[ ${#projects[@]} -eq 0 ]]; then
-    echo "No project directories found"
-    exit 1
+else
+    echo "No config file at $CONFIG_FILE - run 'dot' to create it"
 fi
 
 # Kill existing session if running
 tmux kill-session -t $SESSION 2>/dev/null || true
 
-# Create session with staging window (window 0)
+# Create session with main window
 tmux new-session -d -s $SESSION -n "code" -c "$CODE_DIR"
 
-# Create windows for projects (windows 1-9)
-for project in "${projects[@]}"; do
-    tmux new-window -t $SESSION -n "$project" -c "$CODE_DIR/$project"
-done
+# Create windows for projects (if any found)
+if [[ ${#projects[@]} -eq 0 ]]; then
+    echo "No projects configured - edit ~/.config/tmux/projects to add some"
+else
+    for path in "${projects[@]}"; do
+        name="$(basename "$path")"
+        tmux new-window -t $SESSION -n "$name" -c "$path"
+    done
+fi
 
 # Select staging window
 tmux select-window -t "$SESSION:0"

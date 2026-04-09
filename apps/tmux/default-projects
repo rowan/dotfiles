@@ -1,0 +1,10 @@
+# tmux project tabs - one full path per line
+# Tab name will be the directory name (last part of path)
+# Lines starting with # are ignored
+
+~/Documents/Code/Dunbar
+~/Documents/Code/Hive
+~/Documents/Code/HoddyRoad
+~/Documents/Code/HoddyRoadAPI
+~/Documents/Code/HokuWeb
+~/Documents/Code/MailTriage

@@ -9,13 +9,13 @@ echo "▶️  Setup dotfiles"
 export DOTFILES=$HOME/.dotfiles
 echo "DOTFILES = ${DOTFILES}"
 
-# install claude-code
-echo "▶️  Install claude-code"
-if ! command -v claude-code &> /dev/null; then
-    echo "Installing claude-code..."
+# install claude
+echo "▶️  Install Claude Code"
+if ! command -v claude &> /dev/null; then
+    echo "Installing Claude Code..."
     curl -fsSL https://claude.ai/install.sh | bash
 else
-    echo "claude-code already installed"
+    echo "Claude Code already installed"
 fi
 
 # setup terminal

@@ -8,13 +8,11 @@ APPS=$DOTFILES/apps
 # your project folder that we can `p [tab]` to
 export PROJECTS=~/Documents/Code
 
-# TODO: Stash your environment variables in ~/.localrc. This means they'll stay out
-# of your main dotfiles repository, but
-# you'll have access to them in your scripts.
-# if [[ -a ~/.localrc ]]
-# then
-#  source ~/.localrc
-# fi
+# Source ~/.localrc for machine-specific environment variables, secrets,
+# and PATH additions that shouldn't be in the dotfiles repo.
+if [[ -a ~/.localrc ]]; then
+  source ~/.localrc
+fi
 
 # load the path files
 for file in $(find $APPS -name "path.zsh")

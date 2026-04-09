@@ -1,3 +1,5 @@
+command -v tmux &>/dev/null || return 0
+
 # Ensure tmux config symlink exists
 
 TMUX_CONF="$HOME/.tmux.conf"

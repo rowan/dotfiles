@@ -33,13 +33,14 @@ brew 'yarn'
 brew 'yt-dlp'
 
 cask '1password'
-cask 'asana'
+# cask 'asana'
 cask 'audacity'
 # cask 'calibre'
 cask 'canva'
 cask 'chronosync'
 cask 'claude'
 # cask 'docker'  # Removed - not used in production
+cask 'daisydisk'
 cask 'dropbox'
 cask 'firefox'
 cask 'github'
@@ -47,12 +48,14 @@ cask 'google-chrome'
 cask 'launchcontrol'
 cask 'macwhisper'
 cask 'microsoft-teams'
+cask 'mp3tag'
 cask 'notion'
 cask 'pastebot'
 cask 'rapidapi'
 cask 'sf-symbols'
 cask 'sketch'
-# cask 'slack' # Removed - now installed from Mac App Store
+cask 'postico'
+cask 'slack'
 cask 'sonos'
 cask 'tailscale-app'
 cask 'termius'
@@ -64,10 +67,10 @@ cask 'zoom'
 mas "1Blocker", id: 1365531024
 mas "Amphetamine", id: 937984704
 mas "Instapaper", id: 288545208
-mas "Mp3tag", id: 1532597159
+# mas "Mp3tag", id: 1532597159
 mas "Pixelmator Pro", id: 1289583905
-mas "Postico", id: 1031280567
-mas "DaisyDisk", id: 411643860
+# mas "Postico", id: 1031280567
+# mas "DaisyDisk", id: 411643860
 mas "XCode", id: 497799835
-mas "Slack for Desktop", id: 803453959
+# mas "Slack for Desktop", id: 803453959
 mas "Bumpr", id: 1166066070

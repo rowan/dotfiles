@@ -1,12 +1,12 @@
 # Set up Claude Code user config at ~/.claude/CLAUDE.md
 # This file is personal to each user - we copy a default on first setup
-# but never overwrite an existing config.
+# but never overwrite an existing config. Old symlinks from a previous
+# install are migrated to local copies.
 
 CLAUDE_DIR="$HOME/.claude"
 CLAUDE_MD="$CLAUDE_DIR/CLAUDE.md"
 SOURCE="$DOTFILES/apps/claude/CLAUDE.md"
 
-# Ensure ~/.claude directory exists
 mkdir -p "$CLAUDE_DIR"
 
 if [[ -L "$CLAUDE_MD" ]]; then
@@ -39,27 +39,22 @@ else
     echo "\033[00;33mWarning: claude CLI not found, skipping plugin installation\033[0m"
 fi
 
-# Install custom skills (symlink to keep in sync with dotfiles)
+# Install default skills on first setup (users can add/modify their own)
 SKILLS_DIR="$HOME/.claude/skills"
 SOURCE_SKILLS_DIR="$DOTFILES/apps/claude/skills"
 
 if [[ ! -d "$SOURCE_SKILLS_DIR" ]]; then
     echo "\033[00;33mWarning: Source skills directory not found: $SOURCE_SKILLS_DIR\033[0m"
+elif [[ -L "$SKILLS_DIR" ]]; then
+    # Migrate from old symlink approach: replace with a real copy
+    rm "$SKILLS_DIR"
+    cp -R "$SOURCE_SKILLS_DIR" "$SKILLS_DIR"
+    echo "Migrated $SKILLS_DIR from symlink to local copy"
+elif [[ -d "$SKILLS_DIR" ]]; then
+    # Skills directory already exists - don't touch it
+    :
 else
-    if [[ -L "$SKILLS_DIR" ]] && [[ "$(readlink "$SKILLS_DIR")" == "$SOURCE_SKILLS_DIR" ]]; then
-        # Already correctly symlinked - nothing to do
-        :
-    else
-        if [[ -d "$SKILLS_DIR" ]] && [[ ! -L "$SKILLS_DIR" ]]; then
-            mv "$SKILLS_DIR" "${SKILLS_DIR}.backup.$(date +%s)"
-            echo "Backed up existing skills directory"
-        else
-            rm -f "$SKILLS_DIR"
-        fi
-        if ln -s "$SOURCE_SKILLS_DIR" "$SKILLS_DIR"; then
-            echo "Linked \033[00;34m$SOURCE_SKILLS_DIR\033[0m to \033[00;34m$SKILLS_DIR\033[0m"
-        else
-            echo "\033[00;31mFailed to create symlink: $SKILLS_DIR\033[0m"
-        fi
-    fi
+    # First-time setup: copy the defaults
+    cp -R "$SOURCE_SKILLS_DIR" "$SKILLS_DIR"
+    echo "Created default skills at $SKILLS_DIR"
 fi

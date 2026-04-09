@@ -11,7 +11,9 @@ mkdir -p "$CLAUDE_DIR"
 
 if [[ -L "$CLAUDE_MD" ]]; then
     # Migrate from old symlink approach: replace with a real copy
-    cp --remove-destination "$(readlink "$CLAUDE_MD")" "$CLAUDE_MD"
+    SOURCE_TARGET="$(readlink "$CLAUDE_MD")"
+    rm "$CLAUDE_MD"
+    cp "$SOURCE_TARGET" "$CLAUDE_MD"
     echo "Migrated $CLAUDE_MD from symlink to local copy"
     echo "  You can personalise this file with your own preferences."
 elif [[ -e "$CLAUDE_MD" ]]; then
@@ -45,17 +47,19 @@ if [[ ! -d "$SOURCE_SKILLS_DIR" ]]; then
     echo "\033[00;33mWarning: Source skills directory not found: $SOURCE_SKILLS_DIR\033[0m"
 else
     if [[ -L "$SKILLS_DIR" ]] && [[ "$(readlink "$SKILLS_DIR")" == "$SOURCE_SKILLS_DIR" ]]; then
-        # Already correctly symlinked
+        # Already correctly symlinked - nothing to do
         :
-    elif [[ -d "$SKILLS_DIR" ]] && [[ ! -L "$SKILLS_DIR" ]]; then
-        mv "$SKILLS_DIR" "${SKILLS_DIR}.backup.$(date +%s)"
-        echo "Backed up existing skills directory"
     else
-        rm -f "$SKILLS_DIR"
-    fi
-    if ln -s "$SOURCE_SKILLS_DIR" "$SKILLS_DIR"; then
-        echo "Linked \033[00;34m$SOURCE_SKILLS_DIR\033[0m to \033[00;34m$SKILLS_DIR\033[0m"
-    else
-        echo "\033[00;31mFailed to create symlink: $SKILLS_DIR\033[0m"
+        if [[ -d "$SKILLS_DIR" ]] && [[ ! -L "$SKILLS_DIR" ]]; then
+            mv "$SKILLS_DIR" "${SKILLS_DIR}.backup.$(date +%s)"
+            echo "Backed up existing skills directory"
+        else
+            rm -f "$SKILLS_DIR"
+        fi
+        if ln -s "$SOURCE_SKILLS_DIR" "$SKILLS_DIR"; then
+            echo "Linked \033[00;34m$SOURCE_SKILLS_DIR\033[0m to \033[00;34m$SKILLS_DIR\033[0m"
+        else
+            echo "\033[00;31mFailed to create symlink: $SKILLS_DIR\033[0m"
+        fi
     fi
 fi

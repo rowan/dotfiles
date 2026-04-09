@@ -1,5 +1,6 @@
-# Create symlink in the correct location for Claude Code
-# Claude Code expects user-level config at ~/.claude/CLAUDE.md
+# Set up Claude Code user config at ~/.claude/CLAUDE.md
+# This file is personal to each user - we copy a default on first setup
+# but never overwrite an existing config.
 
 CLAUDE_DIR="$HOME/.claude"
 CLAUDE_MD="$CLAUDE_DIR/CLAUDE.md"
@@ -8,17 +9,19 @@ SOURCE="$DOTFILES/apps/claude/CLAUDE.md"
 # Ensure ~/.claude directory exists
 mkdir -p "$CLAUDE_DIR"
 
-# Create symlink (preserve existing user config)
-if [[ -L "$CLAUDE_MD" ]] && [[ "$(readlink "$CLAUDE_MD")" == "$SOURCE" ]]; then
-    # Already correctly symlinked
+if [[ -L "$CLAUDE_MD" ]]; then
+    # Migrate from old symlink approach: replace with a real copy
+    cp --remove-destination "$(readlink "$CLAUDE_MD")" "$CLAUDE_MD"
+    echo "Migrated $CLAUDE_MD from symlink to local copy"
+    echo "  You can personalise this file with your own preferences."
+elif [[ -e "$CLAUDE_MD" ]]; then
+    # Real file already exists - don't touch it
     :
-elif [[ -e "$CLAUDE_MD" ]] && [[ ! -L "$CLAUDE_MD" ]]; then
-    # Real file exists - don't overwrite the user's config
-    echo "Keeping existing $CLAUDE_MD (not a symlink)"
-elif ln -s "$SOURCE" "$CLAUDE_MD"; then
-    echo "Linked \033[00;34m$SOURCE\033[0m to \033[00;34m$CLAUDE_MD\033[0m"
 else
-    echo "\033[00;31mFailed to create symlink: $CLAUDE_MD\033[0m"
+    # First-time setup: copy the default
+    cp "$SOURCE" "$CLAUDE_MD"
+    echo "Created $CLAUDE_MD with default config"
+    echo "  Personalise this file with your name and preferences."
 fi
 
 # Install Claude Code plugins (official)

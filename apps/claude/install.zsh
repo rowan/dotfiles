@@ -12,8 +12,14 @@ mkdir -p "$CLAUDE_DIR"
 if [[ -L "$CLAUDE_MD" ]]; then
     # Migrate from old symlink approach: replace with a real copy
     SOURCE_TARGET="$(readlink "$CLAUDE_MD")"
-    rm "$CLAUDE_MD"
-    cp "$SOURCE_TARGET" "$CLAUDE_MD"
+    if [[ -f "$SOURCE_TARGET" ]]; then
+        rm "$CLAUDE_MD"
+        cp "$SOURCE_TARGET" "$CLAUDE_MD"
+    else
+        # Broken symlink - fall back to repo default
+        rm "$CLAUDE_MD"
+        cp "$SOURCE" "$CLAUDE_MD"
+    fi
     echo "Migrated $CLAUDE_MD from symlink to local copy"
     echo "  You can personalise this file with your own preferences."
 elif [[ -e "$CLAUDE_MD" ]]; then

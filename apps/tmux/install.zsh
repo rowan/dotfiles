@@ -33,12 +33,14 @@ mkdir -p "$CONFIG_DIR"
 
 if [[ -f "$OLD_CONFIG" ]] && [[ ! -f "$CONFIG_FILE" ]]; then
     # Migrate old config (note: old format was just project names, not full paths)
+    migrated=0
     echo "# Migrated from old config - update to full paths" > "$CONFIG_FILE"
     while IFS= read -r project || [[ -n "$project" ]]; do
         [[ -z "$project" || "$project" =~ ^# ]] && continue
         echo "~/Documents/Code/$project" >> "$CONFIG_FILE"
+        migrated=1
     done < "$OLD_CONFIG"
-    if [[ -s "$CONFIG_FILE" ]]; then
+    if [[ "$migrated" -eq 1 ]]; then
         rm "$OLD_CONFIG"
         echo "Migrated tmux projects config to $CONFIG_FILE"
     else

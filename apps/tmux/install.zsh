@@ -1,3 +1,5 @@
+command -v tmux &>/dev/null || return 0
+
 # Ensure tmux config symlink exists
 
 TMUX_CONF="$HOME/.tmux.conf"
@@ -31,13 +33,19 @@ mkdir -p "$CONFIG_DIR"
 
 if [[ -f "$OLD_CONFIG" ]] && [[ ! -f "$CONFIG_FILE" ]]; then
     # Migrate old config (note: old format was just project names, not full paths)
+    migrated=0
     echo "# Migrated from old config - update to full paths" > "$CONFIG_FILE"
     while IFS= read -r project || [[ -n "$project" ]]; do
         [[ -z "$project" || "$project" =~ ^# ]] && continue
         echo "~/Documents/Code/$project" >> "$CONFIG_FILE"
+        migrated=1
     done < "$OLD_CONFIG"
-    rm "$OLD_CONFIG"
-    echo "Migrated tmux projects config to $CONFIG_FILE"
+    if [[ "$migrated" -eq 1 ]]; then
+        rm "$OLD_CONFIG"
+        echo "Migrated tmux projects config to $CONFIG_FILE"
+    else
+        echo "Warning: Migration may have failed - keeping old config at $OLD_CONFIG"
+    fi
 elif [[ ! -f "$CONFIG_FILE" ]]; then
     # Copy default from repo
     cp "$DEFAULT_FILE" "$CONFIG_FILE"

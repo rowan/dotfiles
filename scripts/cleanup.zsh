@@ -90,9 +90,14 @@ echo "› \033[00;34mCleaning up other known issues\033[0m"
 # - Clean up old application support files
 # - Fix permission issues
 
-# Empty the trash
-echo "› \033[00;34mEmptying trash\033[0m"
-osascript -e 'tell application "Finder" to empty trash' 2>/dev/null || true
+# Empty the trash (with confirmation - this permanently deletes files)
+echo "› \033[00;34mTrash cleanup\033[0m"
+read "?  Empty the Trash? This permanently deletes files. [y/N] " empty_trash
+if [[ "$empty_trash" =~ ^[Yy]$ ]]; then
+    osascript -e 'tell application "Finder" to empty trash' 2>/dev/null || true
+else
+    echo "  Skipping - empty manually from Finder if needed"
+fi
 
 echo "✅ Cleanup complete"
 echo ""

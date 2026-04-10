@@ -8,13 +8,11 @@ APPS=$DOTFILES/apps
 # your project folder that we can `p [tab]` to
 export PROJECTS=~/Documents/Code
 
-# TODO: Stash your environment variables in ~/.localrc. This means they'll stay out
-# of your main dotfiles repository, but
-# you'll have access to them in your scripts.
-# if [[ -a ~/.localrc ]]
-# then
-#  source ~/.localrc
-# fi
+# Source ~/.localrc for machine-specific environment variables, secrets,
+# and PATH additions that shouldn't be in the dotfiles repo.
+if [[ -a ~/.localrc ]]; then
+  source ~/.localrc
+fi
 
 # load the path files
 for file in $(find $APPS -name "path.zsh")
@@ -41,11 +39,5 @@ do
   source $file
 done
 
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/Studio/Desktop/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/Studio/Desktop/google-cloud-sdk/path.zsh.inc'; fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f '/Users/Studio/Desktop/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/Studio/Desktop/google-cloud-sdk/completion.zsh.inc'; fi
 export PATH="$HOME/.local/bin:$PATH"
-export PATH="/opt/homebrew/opt/postgresql@17/bin:$PATH"
 

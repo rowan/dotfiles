@@ -1,3 +1,5 @@
+[[ -d "/Applications/Amphetamine.app" ]] || return 0
+
 # Add to login items if not already there
 osascript -e '
 tell application "System Events"

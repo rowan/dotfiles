@@ -38,7 +38,7 @@ cask 'audacity'
 cask 'canva'
 cask 'chronosync'
 cask 'claude'
-# cask 'docker'  # Removed - not used in production
+cask 'docker-desktop'
 cask 'daisydisk'
 cask 'dropbox'
 cask 'firefox'

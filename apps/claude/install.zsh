@@ -32,6 +32,18 @@ else
     echo "  Personalise this file with your name and preferences."
 fi
 
+# Update Claude Code CLI to latest version
+echo "▶️  Update Claude Code CLI"
+if command -v claude &> /dev/null; then
+    if claude update; then
+        echo "Claude Code CLI up to date"
+    else
+        echo "\033[00;33mWarning: Failed to update Claude Code CLI\033[0m"
+    fi
+else
+    echo "\033[00;33mWarning: claude CLI not found, skipping update\033[0m"
+fi
+
 # Install Claude Code plugins (official)
 if command -v claude &> /dev/null; then
     for plugin in "frontend-design@claude-plugins-official" "pr-review-toolkit@claude-plugins-official"; do

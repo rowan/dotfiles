@@ -1,6 +1,6 @@
 ---
-name: copilot-review
-description: Apply Copilot review feedback and resolve comments.
+description: Apply Copilot review feedback and resolve comments on the current PR.
+allowed-tools: ["Bash", "Read", "Edit", "Grep", "Glob"]
 ---
 
 You are reviewing and applying GitHub Copilot's code review feedback. Your job is to:

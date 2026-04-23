@@ -1,6 +1,6 @@
 ---
-name: learnings
-description: Capture lessons from the current PR for future reference.
+description: Capture lessons from the current PR and conversation into LEARNINGS.md.
+allowed-tools: ["Bash", "Read", "Edit", "Write", "Grep", "Glob"]
 ---
 
 > **Note:** The name "learnings" is used ironically. The correct word is "lessons". But corporate jargon has infected the industry, so here we are.
@@ -9,7 +9,7 @@ You are reviewing the current PR and conversation to capture useful lessons in `
 
 ## When to use
 
-Run this skill just before merging a PR, to capture insights that could help future work.
+Run this command just before merging a PR, to capture insights that could help future work.
 
 ## What to capture
 

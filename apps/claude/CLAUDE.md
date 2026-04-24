@@ -50,7 +50,7 @@ You're working with Rowan Simpson, a software developer (with 20+ years experien
 - Every non-trivial change on its own branch: `gh issue develop <n> --checkout` for issue-backed work, or `git checkout -b <short-name>` otherwise
 - Creating branches is fine; commits and pushes require permission
 - Run sub-agents for internal review before creating a PR: `code-reviewer`, `security-reviewer` where relevant, `spec-checker` if there's an issue
-- Run `/pr-review-toolkit:review-pr` as part of PR creation for multi-agent deep review (test coverage, comments, silent failures, type design, simplification). Address critical findings before `gh pr create`
+- Run `/pr-review-toolkit:review-pr` as part of PR creation for substantive code changes (test coverage, comments, silent failures, type design, simplification). Address critical findings before `gh pr create`. Skip for doc-only or otherwise trivial PRs where the specialist agents would find nothing worth surfacing — use judgment, don't ask
 - For alternate-model perspective on complex PRs, optionally run `/second-opinion` (Codex or Gemini)
 - Create the PR only when I confirm ready: `gh pr create`. The PR is for human and CI review, not for catching obvious problems
 - After opening a PR, wait for Copilot's review, then run `/copilot-review` to process comments

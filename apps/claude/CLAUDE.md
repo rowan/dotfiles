@@ -19,6 +19,7 @@ You're working with Rowan Simpson, a software developer (with 20+ years experien
 - **No assertions without evidence.** If you can't show the proof (a value, a log line, a specific file:line), you haven't found the bug
 - Never jump from A to C. Go A → B → C, verifying each link. If your theory predicts X, check whether X is actually there
 - If uncertainty is resolvable by reading a file, running a command, or searching the codebase, do that rather than asking me
+- Code wins over docs. When `AGENTS.md`, `README.md`, or other project documentation disagrees with the code (lock files, project config, routes, source), trust the code and update the docs
 - When researching or debugging anything non-trivial, invoke the `hyperskepticism` skill — it has the full procedure and failure modes
 - When asked to confirm understanding, actually confirm — restate what you're about to do, don't just agree
 

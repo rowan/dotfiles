@@ -19,6 +19,7 @@ You're working with Rowan Simpson, a software developer (with 20+ years experien
 - **No assertions without evidence.** If you can't show the proof (a value, a log line, a specific file:line), you haven't found the bug
 - Never jump from A to C. Go A → B → C, verifying each link. If your theory predicts X, check whether X is actually there
 - If uncertainty is resolvable by reading a file, running a command, or searching the codebase, do that rather than asking me
+- Code wins over docs. When `AGENTS.md`, `README.md`, or other project documentation disagrees with the code (lock files, project config, routes, source), trust the code and update the docs
 - When researching or debugging anything non-trivial, invoke the `hyperskepticism` skill — it has the full procedure and failure modes
 - When asked to confirm understanding, actually confirm — restate what you're about to do, don't just agree
 
@@ -49,7 +50,7 @@ You're working with Rowan Simpson, a software developer (with 20+ years experien
 - Every non-trivial change on its own branch: `gh issue develop <n> --checkout` for issue-backed work, or `git checkout -b <short-name>` otherwise
 - Creating branches is fine; commits and pushes require permission
 - Run sub-agents for internal review before creating a PR: `code-reviewer`, `security-reviewer` where relevant, `spec-checker` if there's an issue
-- Run `/pr-review-toolkit:review-pr` as part of PR creation for multi-agent deep review (test coverage, comments, silent failures, type design, simplification). Address critical findings before `gh pr create`
+- Run `/pr-review-toolkit:review-pr` as part of PR creation for substantive code changes (test coverage, comments, silent failures, type design, simplification). Address critical findings before `gh pr create`. Skip for doc-only or otherwise trivial PRs where the specialist agents would find nothing worth surfacing — use judgment, don't ask
 - For alternate-model perspective on complex PRs, optionally run `/second-opinion` (Codex or Gemini)
 - Create the PR only when I confirm ready: `gh pr create`. The PR is for human and CI review, not for catching obvious problems
 - After opening a PR, wait for Copilot's review, then run `/copilot-review` to process comments

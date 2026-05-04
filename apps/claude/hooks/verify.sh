@@ -11,6 +11,14 @@
 # run even if an earlier one fails.
 set -uo pipefail
 
+# Cap each individual check's stderr block before feeding it back to Claude.
+# A repo-wide lint can spew thousands of lines and blow out the context
+# window; 8K chars is enough to see the first dozen failures and bounded
+# against worst-case. Note: bash's ${#s} and ${s:0:N} count characters in a
+# UTF-8 locale, not bytes — fine for ~ASCII linter output, but the cap can
+# be larger than this in actual bytes if the output contains multibyte chars.
+MAX_OUTPUT_CHARS=8192
+
 # Read stdin payload and check stop_hook_active
 INPUT=$(cat 2>/dev/null || echo '{}')
 if command -v jq >/dev/null 2>&1; then
@@ -39,6 +47,17 @@ fi
 
 errors=()
 
+# Truncate to MAX_OUTPUT_CHARS if longer; the suffix tells the agent the
+# full length so it knows there's more behind the cap.
+truncate_output() {
+  local s="$1" len=${#1}
+  if (( len > MAX_OUTPUT_CHARS )); then
+    s="${s:0:$MAX_OUTPUT_CHARS}"
+    s+=$'\n... (output truncated; full length: '"$len"' chars)'
+  fi
+  printf '%s' "$s"
+}
+
 run() {
   local label="$1"; shift
   local output rc cmd
@@ -48,19 +67,56 @@ run() {
     # printf '%q' shell-quotes each arg so space-containing args render
     # unambiguously in the error output.
     cmd=$(printf '%q ' "$@")
+    output=$(truncate_output "$output")
     errors+=("[$label] exit $rc: ${cmd% }"$'\n'"$output")
   fi
+}
+
+# Print working-tree paths matching any of the given space-separated
+# extensions, one per line. Scope is staged + unstaged + untracked, with
+# deletions excluded. Working tree (not main..HEAD) keeps the list bounded
+# regardless of branch age — long-lived branches were the original
+# context-blowout source.
+#
+# In a brand-new repo with no HEAD yet, `git diff HEAD` errors. Fall back
+# to "everything in the index plus untracked" so initial-commit work still
+# gets linted.
+changed_files() {
+  local pattern="${1// /|}"
+  if git rev-parse --verify HEAD >/dev/null 2>&1; then
+    {
+      git diff --name-only --diff-filter=ACMR HEAD 2>/dev/null
+      git ls-files --others --exclude-standard 2>/dev/null
+    } | grep -E "\.($pattern)$" 2>/dev/null
+  else
+    {
+      git ls-files --cached 2>/dev/null
+      git ls-files --others --exclude-standard 2>/dev/null
+    } | grep -E "\.($pattern)$" 2>/dev/null
+  fi
+  return 0
 }
 
 # Project-local verify wins
 if [[ -x .claude/verify.sh ]]; then
   if ! output=$(.claude/verify.sh fast 2>&1); then
+    output=$(truncate_output "$output")
     errors+=("[project-verify-fast]"$'\n'"$output")
   fi
 else
-  # Auto-detect — FAST CHECKS ONLY
-  if [[ -f Gemfile ]]; then
-    [[ -f bin/rubocop ]] && run "rubocop" bin/rubocop --force-exclusion
+  # Auto-detect — FAST CHECKS ONLY, scoped to changed files where the linter
+  # accepts file-list args. Projects whose linters don't fit this shape
+  # (Biome, Oxlint, custom wrappers) should add a project-local
+  # .claude/verify.sh fast.
+
+  if [[ -f Gemfile && -f bin/rubocop ]]; then
+    files=()
+    while IFS= read -r f; do
+      [[ -n "$f" ]] && files+=("$f")
+    done < <(changed_files "rb")
+    if (( ${#files[@]} > 0 )); then
+      run "rubocop" bin/rubocop --force-exclusion "${files[@]}"
+    fi
   fi
 
   if [[ -f package.json ]]; then
@@ -70,12 +126,31 @@ else
     fi
     if [[ -n "$pm" ]]; then
       grep -q '"typecheck"' package.json && run "typecheck" $pm run typecheck
-      grep -q '"lint"'      package.json && run "lint"      $pm run lint
+    fi
+    # Call the ESLint binary directly so we can pass file args. `pnpm run
+    # lint` is unreliable here because lint scripts like `eslint .` ignore
+    # extra arguments and lint the whole repo anyway.
+    if [[ -x node_modules/.bin/eslint ]]; then
+      files=()
+      while IFS= read -r f; do
+        [[ -n "$f" ]] && files+=("$f")
+      done < <(changed_files "js jsx ts tsx mjs cjs")
+      if (( ${#files[@]} > 0 )); then
+        run "eslint" node_modules/.bin/eslint "${files[@]}"
+      fi
     fi
   fi
 
   if compgen -G "*.xcodeproj" >/dev/null || compgen -G "*.xcworkspace" >/dev/null || [[ -f Package.swift ]]; then
-    command -v swiftlint >/dev/null && run "swiftlint" swiftlint --quiet
+    if command -v swiftlint >/dev/null; then
+      files=()
+      while IFS= read -r f; do
+        [[ -n "$f" ]] && files+=("$f")
+      done < <(changed_files "swift")
+      if (( ${#files[@]} > 0 )); then
+        run "swiftlint" swiftlint --quiet "${files[@]}"
+      fi
+    fi
   fi
 fi
 

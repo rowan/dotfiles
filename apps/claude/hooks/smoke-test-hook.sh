@@ -284,7 +284,7 @@ if pushd "$truncdir" >/dev/null; then
   git commit -q -m "init"
 
   mkdir -p .claude
-  # Emit ~50 KiB of output — well over the 8 KiB MAX_OUTPUT_BYTES cap.
+  # Emit ~50 KiB of output — well over the 8K-char MAX_OUTPUT_CHARS cap.
   cat > .claude/verify.sh <<'EOF'
 #!/usr/bin/env bash
 if [[ "${1:-}" == "fast" ]]; then
@@ -395,6 +395,38 @@ EOF
   popd >/dev/null
 else
   echo "  ✗ pushd failed for test 12"
+  fail=$((fail+1))
+fi
+
+echo
+echo "Test 13: untracked-only changes still trigger the hook"
+untrackeddir=$(mktemp -d)
+cleanup_dirs+=("$untrackeddir")
+if pushd "$untrackeddir" >/dev/null; then
+  git init -q
+  git config user.email "test@test"
+  git config user.name "test"
+  touch Gemfile
+  mkdir -p bin
+  cat > bin/rubocop <<'EOF'
+#!/usr/bin/env bash
+echo "synthetic rubocop failure" >&2
+exit 1
+EOF
+  chmod +x bin/rubocop
+  echo "ok" > existing.txt
+  git add -A
+  git commit -q -m "init"
+  # New, untracked .rb file. Nothing modified, nothing staged.
+  echo "# new" > new.rb
+
+  exit_code=0
+  stderr_output=$(echo '{"stop_hook_active":false}' | CLAUDE_PROJECT_DIR="$untrackeddir" "$HOOK" 2>&1 >/dev/null) || exit_code=$?
+  check "untracked-only .rb still triggers rubocop" 2 "$exit_code"
+  check_contains "stderr labelled [rubocop]" "[rubocop]" "$stderr_output"
+  popd >/dev/null
+else
+  echo "  ✗ pushd failed for test 13"
   fail=$((fail+1))
 fi
 

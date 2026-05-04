@@ -40,20 +40,24 @@ cd "${CLAUDE_PROJECT_DIR:-$PWD}" 2>/dev/null || {
 }
 git rev-parse --git-dir >/dev/null 2>&1 || exit 0
 
-# Nothing changed, nothing to verify
-if git diff --quiet && git diff --staged --quiet; then
+# Nothing changed, nothing to verify. Use --porcelain so untracked files
+# count too — otherwise a brand-new file on its own would short-circuit
+# the hook before changed_files() got a chance to lint it.
+if [[ -z "$(git status --porcelain 2>/dev/null)" ]]; then
   exit 0
 fi
 
 errors=()
 
-# Truncate to MAX_OUTPUT_CHARS if longer; the suffix tells the agent the
-# full length so it knows there's more behind the cap.
+# Truncate to MAX_OUTPUT_CHARS as a hard cap, including the truncation
+# suffix. We reserve space for the suffix so the final block stays within
+# the limit regardless of the source length.
 truncate_output() {
   local s="$1" len=${#1}
   if (( len > MAX_OUTPUT_CHARS )); then
-    s="${s:0:$MAX_OUTPUT_CHARS}"
-    s+=$'\n... (output truncated; full length: '"$len"' chars)'
+    local suffix=$'\n... (output truncated; full length: '"$len"' chars)'
+    local body_max=$(( MAX_OUTPUT_CHARS - ${#suffix} ))
+    s="${s:0:$body_max}$suffix"
   fi
   printf '%s' "$s"
 }

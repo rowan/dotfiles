@@ -127,10 +127,10 @@ echo "synthetic rubocop failure" >&2
 exit 1
 EOF
   chmod +x bin/rubocop
-  echo "ok" > file.txt
+  echo "# ok" > foo.rb
   git add -A
   git commit -q -m "init"
-  echo "changed" >> file.txt
+  echo "# changed" >> foo.rb
 
   exit_code=0
   stderr_output=$(echo '{"stop_hook_active":false}' | CLAUDE_PROJECT_DIR="$rubydir" "$HOOK" 2>&1 >/dev/null) || exit_code=$?
@@ -193,7 +193,7 @@ echo '{"stop_hook_active":true}' | PATH="$shim_dir:/bin" "$HOOK" >/dev/null 2>&1
 check "loop guard via grep fallback" 0 "$exit_code"
 
 echo
-echo "Test 8: Node project with failing typecheck AND lint accumulates both errors"
+echo "Test 8: Node project with failing typecheck AND eslint accumulates both errors"
 nodedir=$(mktemp -d)
 cleanup_dirs+=("$nodedir")
 npm_shim_dir=$(mktemp -d)
@@ -211,10 +211,19 @@ if pushd "$nodedir" >/dev/null; then
   cat > package.json <<'EOF'
 { "scripts": { "typecheck": "echo ts", "lint": "echo lint" } }
 EOF
-  echo "ok" > file.txt
+  # ESLint is detected via the binary path, not the npm script — the hook
+  # calls it directly so it can pass changed-file args.
+  mkdir -p node_modules/.bin
+  cat > node_modules/.bin/eslint <<'EOF'
+#!/usr/bin/env bash
+echo "synthetic eslint failure" >&2
+exit 1
+EOF
+  chmod +x node_modules/.bin/eslint
+  echo "let x = 1" > file.ts
   git add -A
   git commit -q -m "init"
-  echo "changed" >> file.txt
+  echo "let y = 2" >> file.ts
 
   # PATH scoped to our shim dir + system basics (for git/cat/grep etc). Omits
   # /usr/local/bin etc. so any real pnpm/npm on the host doesn't leak in.
@@ -222,11 +231,202 @@ EOF
   stderr_output=$(echo '{"stop_hook_active":false}' | PATH="$npm_shim_dir:/usr/bin:/bin" CLAUDE_PROJECT_DIR="$nodedir" "$HOOK" 2>&1 >/dev/null) || exit_code=$?
   check "both npm checks trigger and fail" 2 "$exit_code"
   check_contains "stderr labelled [typecheck]" "[typecheck]" "$stderr_output"
-  check_contains "stderr labelled [lint]" "[lint]" "$stderr_output"
+  check_contains "stderr labelled [eslint]" "[eslint]" "$stderr_output"
   check_contains "stderr has --- separator (two entries)" "---" "$stderr_output"
   popd >/dev/null
 else
   echo "  ✗ pushd failed for test 8"
+  fail=$((fail+1))
+fi
+
+echo
+echo "Test 9: Ruby project with non-Ruby change skips rubocop entirely"
+rubyskipdir=$(mktemp -d)
+cleanup_dirs+=("$rubyskipdir")
+if pushd "$rubyskipdir" >/dev/null; then
+  git init -q
+  git config user.email "test@test"
+  git config user.name "test"
+  touch Gemfile
+  mkdir -p bin
+  # Fail loudly if invoked — the test asserts rubocop is NOT called when no
+  # .rb files are in the working tree change set.
+  cat > bin/rubocop <<'EOF'
+#!/usr/bin/env bash
+echo "rubocop should NOT have run" >&2
+exit 1
+EOF
+  chmod +x bin/rubocop
+  echo "ok" > README.md
+  git add -A
+  git commit -q -m "init"
+  echo "changed" >> README.md
+
+  exit_code=0
+  stderr_output=$(echo '{"stop_hook_active":false}' | CLAUDE_PROJECT_DIR="$rubyskipdir" "$HOOK" 2>&1 >/dev/null) || exit_code=$?
+  check "non-Ruby change skips rubocop (exit 0)" 0 "$exit_code"
+  popd >/dev/null
+else
+  echo "  ✗ pushd failed for test 9"
+  fail=$((fail+1))
+fi
+
+echo
+echo "Test 10: oversize check output is truncated, not dumped whole"
+truncdir=$(mktemp -d)
+cleanup_dirs+=("$truncdir")
+if pushd "$truncdir" >/dev/null; then
+  git init -q
+  git config user.email "test@test"
+  git config user.name "test"
+  echo "ok" > file.txt
+  git add file.txt
+  git commit -q -m "init"
+
+  mkdir -p .claude
+  # Emit ~50 KiB of output — well over the 8K-char MAX_OUTPUT_CHARS cap.
+  cat > .claude/verify.sh <<'EOF'
+#!/usr/bin/env bash
+if [[ "${1:-}" == "fast" ]]; then
+  for i in $(seq 1 1000); do
+    echo "synthetic line $i: padding bytes to push past the truncation cap" >&2
+  done
+  exit 2
+fi
+exit 0
+EOF
+  chmod +x .claude/verify.sh
+
+  echo "changed" >> file.txt
+
+  exit_code=0
+  stderr_output=$(echo '{"stop_hook_active":false}' | CLAUDE_PROJECT_DIR="$truncdir" "$HOOK" 2>&1 >/dev/null) || exit_code=$?
+  check "oversize output still exits 2" 2 "$exit_code"
+  check_contains "stderr contains truncation marker" "output truncated" "$stderr_output"
+  # Cap is 8192 chars per error block; the wrapper text ("Fast verification
+  # failed...", "---", footer) adds a few hundred more. 12288 (1.5x) is
+  # enough slack for the wrapper without letting a doubling regression slip.
+  size=${#stderr_output}
+  if (( size < 12288 )); then
+    echo "  ✓ stderr bounded (${size} chars < 12288)"
+    pass=$((pass+1))
+  else
+    echo "  ✗ stderr too large (${size} chars, expected under 12288)"
+    fail=$((fail+1))
+  fi
+  popd >/dev/null
+else
+  echo "  ✗ pushd failed for test 10"
+  fail=$((fail+1))
+fi
+
+echo
+echo "Test 11: mixed-extension change set lints only the matching files"
+mixeddir=$(mktemp -d)
+cleanup_dirs+=("$mixeddir")
+if pushd "$mixeddir" >/dev/null; then
+  git init -q
+  git config user.email "test@test"
+  git config user.name "test"
+  touch Gemfile
+  mkdir -p bin
+  # Shim records its argv to a file we can inspect after the run.
+  cat > bin/rubocop <<EOF
+#!/usr/bin/env bash
+echo "\$@" > "$mixeddir/rubocop_args"
+echo "synthetic rubocop failure" >&2
+exit 1
+EOF
+  chmod +x bin/rubocop
+  echo "# ok" > foo.rb
+  echo "ok" > README.md
+  git add -A
+  git commit -q -m "init"
+  echo "# changed" >> foo.rb
+  echo "changed" >> README.md
+
+  exit_code=0
+  stderr_output=$(echo '{"stop_hook_active":false}' | CLAUDE_PROJECT_DIR="$mixeddir" "$HOOK" 2>&1 >/dev/null) || exit_code=$?
+  check "rubocop runs (exit 2)" 2 "$exit_code"
+  if [[ -f rubocop_args ]]; then
+    args=$(cat rubocop_args)
+    check_contains "rubocop received foo.rb" "foo.rb" "$args"
+    if echo "$args" | grep -qF "README.md"; then
+      echo "  ✗ rubocop received README.md (should not have): $args"
+      fail=$((fail+1))
+    else
+      echo "  ✓ rubocop did not receive README.md"
+      pass=$((pass+1))
+    fi
+  else
+    echo "  ✗ rubocop_args file missing — shim not invoked"
+    fail=$((fail+1))
+  fi
+  popd >/dev/null
+else
+  echo "  ✗ pushd failed for test 11"
+  fail=$((fail+1))
+fi
+
+echo
+echo "Test 12: initial-commit (no HEAD) repo still lints staged Ruby files"
+initdir=$(mktemp -d)
+cleanup_dirs+=("$initdir")
+if pushd "$initdir" >/dev/null; then
+  git init -q
+  git config user.email "test@test"
+  git config user.name "test"
+  touch Gemfile
+  mkdir -p bin
+  cat > bin/rubocop <<'EOF'
+#!/usr/bin/env bash
+echo "synthetic rubocop failure" >&2
+exit 1
+EOF
+  chmod +x bin/rubocop
+  echo "# ok" > foo.rb
+  # Stage but do NOT commit — there's no HEAD at this point.
+  git add -A
+
+  exit_code=0
+  stderr_output=$(echo '{"stop_hook_active":false}' | CLAUDE_PROJECT_DIR="$initdir" "$HOOK" 2>&1 >/dev/null) || exit_code=$?
+  check "no-HEAD repo with staged .rb still triggers rubocop" 2 "$exit_code"
+  check_contains "stderr labelled [rubocop]" "[rubocop]" "$stderr_output"
+  popd >/dev/null
+else
+  echo "  ✗ pushd failed for test 12"
+  fail=$((fail+1))
+fi
+
+echo
+echo "Test 13: untracked-only changes still trigger the hook"
+untrackeddir=$(mktemp -d)
+cleanup_dirs+=("$untrackeddir")
+if pushd "$untrackeddir" >/dev/null; then
+  git init -q
+  git config user.email "test@test"
+  git config user.name "test"
+  touch Gemfile
+  mkdir -p bin
+  cat > bin/rubocop <<'EOF'
+#!/usr/bin/env bash
+echo "synthetic rubocop failure" >&2
+exit 1
+EOF
+  chmod +x bin/rubocop
+  echo "ok" > existing.txt
+  git add -A
+  git commit -q -m "init"
+  # New, untracked .rb file. Nothing modified, nothing staged.
+  echo "# new" > new.rb
+
+  exit_code=0
+  stderr_output=$(echo '{"stop_hook_active":false}' | CLAUDE_PROJECT_DIR="$untrackeddir" "$HOOK" 2>&1 >/dev/null) || exit_code=$?
+  check "untracked-only .rb still triggers rubocop" 2 "$exit_code"
+  check_contains "stderr labelled [rubocop]" "[rubocop]" "$stderr_output"
+  popd >/dev/null
+else
+  echo "  ✗ pushd failed for test 13"
   fail=$((fail+1))
 fi
 

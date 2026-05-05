@@ -36,6 +36,26 @@ Lessons captured from past work to inform future development. Updated when mergi
 
 - **Modern macOS (Sequoia 15+) ships `jq` at `/usr/bin/jq`**: Tests that try to force a grep fallback via `PATH=/usr/bin:/bin` silently hit the real jq and pass vacuously. Use an empty shim directory as PATH to genuinely remove jq from a test environment.
 
+- **bash `${#s}` and `${s:0:N}` count characters, not bytes, in UTF-8 locales**: macOS defaults to UTF-8. A 4-byte emoji is 1 character to bash. Fine for ASCII linter output, but a "max bytes" cap implemented this way is actually a max-chars cap. Name the constant accordingly (`MAX_OUTPUT_CHARS`, not `MAX_OUTPUT_BYTES`).
+
+## Git
+
+- **`git diff` and `git diff --staged` don't see untracked files**: A "is anything changed?" guard built from these two commands silently misses brand-new files. Use `git status --porcelain` (everything including untracked) or add `git ls-files --others --exclude-standard` to the check.
+
+- **`git diff HEAD` errors on a brand-new repo**: No HEAD ref exists before the first commit. Scripts that target HEAD-relative diffs need to detect `git rev-parse --verify HEAD` failing and fall back to `git ls-files --cached` for the index contents.
+
+- **`--diff-filter=ACMR` excludes deletions**: When piping changed files into a linter, you don't want deleted paths since they no longer exist on disk. ACMR keeps Added, Copied, Modified, Renamed.
+
+## Hook design
+
+- **Scope ambient hook checks to the working tree, not `main..HEAD`**: A long-lived branch produces an unbounded diff against main, which means unbounded lint output, which blows out the agent's context window. Working-tree scope (`git diff HEAD` ∪ untracked) is bounded by what's in front of you, not how old the branch is.
+
+- **`pnpm run lint` doesn't reliably forward file args**: Many lint scripts hardcode the path, e.g. `"lint": "eslint ."`, so extra args after `--` get ignored or trip on the existing `.`. To lint a specific file list, invoke the binary directly (`node_modules/.bin/eslint <files>`). Same caveat for any wrapper script in package.json that puts a path in the script body.
+
+- **Hard cap output before feeding it back to Claude**: A failing lint can emit thousands of lines that get piped into the agent's context as stderr. Truncate per-error block to a fixed cap, and *reserve space for the truncation suffix* before slicing so the cap stays hard rather than drifting by ~50 chars per block.
+
+- **Match guard contracts to helper contracts**: If a new helper claims "staged + unstaged + untracked", any guard that short-circuits before calling it needs the same definition. Otherwise the guard's narrower view fires first and the helper never runs. Real case: a "nothing changed" early-exit using only `git diff` checks skipped untracked-only changes, even though the new scoping helper included them.
+
 ## GitHub CLI
 
 - **Resolve PR comment threads via GraphQL**: Use `gh api graphql` with the `resolveReviewThread` mutation to programmatically mark review threads as resolved. Requires the thread's node ID from the `reviewThreads` query.
@@ -44,4 +64,4 @@ Lessons captured from past work to inform future development. Updated when mergi
 
 ## Code review
 
-- **Verify Copilot PR review claims before applying**: In a sample of 3 comments on one PR, all 3 were confidently wrong: false claims about macOS `mktemp` semantics, and missing context about what's in the Brewfile. Always run the failing case yourself before changing code to match a review suggestion.
+- **Verify Copilot PR review claims before applying**: Quality varies sharply between PRs. One early sample had 3/3 confidently wrong (false `mktemp` claims, missing Brewfile context); a later PR had 3/3 sound (caught a real char-vs-byte gotcha and a contract mismatch between an early-exit guard and a new scoping helper). Don't infer Copilot is reliably right or reliably wrong: read each suggestion in context, run the failing case yourself, and apply on merit.

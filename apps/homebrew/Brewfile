@@ -62,6 +62,7 @@ cask 'termius'
 cask 'trader-workstation'
 cask 'vlc'
 cask 'visual-studio-code'
+cask 'wispr-flow'
 cask 'zoom'
 
 mas "1Blocker", id: 1365531024

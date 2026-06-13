@@ -1,6 +1,6 @@
 # Sets macOS defaults
 
-# Kill apps we're about to reconfigure
+# Quit Safari so it picks up the new settings on next launch
 osascript -e 'quit app "Safari"'
 
 echo "ℹ️  Applying macOS defaults"
@@ -11,70 +11,78 @@ echo "ℹ️  Applying macOS defaults"
 [[ -o errexit ]] && _errexit_was_set=1 || _errexit_was_set=
 set +e
 
+# Record any failed write so failures are surfaced in a summary at the end
+# rather than scrolling past unnoticed, while the rest of the run continues.
+defaults_failed=()
+set_default() { defaults write "$@" || defaults_failed+=("$1 $2"); }
+
 # Turn on app auto-update
-defaults write com.apple.SoftwareUpdate AutomaticCheckEnabled -bool true
-defaults write com.apple.commerce AutoUpdate -bool true
+set_default com.apple.SoftwareUpdate AutomaticCheckEnabled -bool true
+set_default com.apple.commerce AutoUpdate -bool true
 
 # Use AirDrop over every interface
-defaults write com.apple.NetworkBrowser BrowseAllInterfaces -int 1
+set_default com.apple.NetworkBrowser BrowseAllInterfaces -int 1
 
 # Trackpad - enable three-finger tap to look up & data detectors
-defaults write com.apple.AppleMultitouchTrackpad TrackpadThreeFingerTapGesture -int 2
+set_default com.apple.AppleMultitouchTrackpad TrackpadThreeFingerTapGesture -int 2
 
 # Dock - show on the right, no autohide
-defaults write com.apple.dock orientation -string "right"
-defaults write com.apple.dock autohide -bool false
+set_default com.apple.dock orientation -string "right"
+set_default com.apple.dock autohide -bool false
 
 # Finder - don't show volumes on desktop, default to column view, empty trash securely
-defaults write com.apple.finder ShowHardDrivesOnDesktop -bool false
-defaults write com.apple.finder ShowExternalHardDrivesOnDesktop -bool false
-defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool false
-defaults write com.apple.finder FXPreferredViewStyle -string "clmv"
-defaults write com.apple.finder EmptyTrashSecurely -bool true
+set_default com.apple.finder ShowHardDrivesOnDesktop -bool false
+set_default com.apple.finder ShowExternalHardDrivesOnDesktop -bool false
+set_default com.apple.finder ShowRemovableMediaOnDesktop -bool false
+set_default com.apple.finder FXPreferredViewStyle -string "clmv"
+set_default com.apple.finder EmptyTrashSecurely -bool true
 
 # Don't create .DS_Store files on network or USB volumes
-defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
-defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true
+set_default com.apple.desktopservices DSDontWriteNetworkStores -bool true
+set_default com.apple.desktopservices DSDontWriteUSBStores -bool true
 
 # Save files to disk (rather than iCloud) by default
-defaults write NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false
+set_default NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false
 
 # Photos - don't open automatically when devices are plugged in
-defaults write com.apple.ImageCapture disableHotPlug -bool true
+set_default com.apple.ImageCapture disableHotPlug -bool true
 
 # Calendar
-defaults write com.apple.iCal "TimeZone support enabled" -bool true
-defaults write com.apple.iCal "display birthdays calendar" -bool true
-defaults write com.apple.iCal "display holidays calendar" -bool true
-defaults write com.apple.iCal CalendarListMiniMonthVisibleMonths -int 3
-defaults write com.apple.iCal CalendarSidebarShown -bool true
+set_default com.apple.iCal "TimeZone support enabled" -bool true
+set_default com.apple.iCal "display birthdays calendar" -bool true
+set_default com.apple.iCal "display holidays calendar" -bool true
+set_default com.apple.iCal CalendarListMiniMonthVisibleMonths -int 3
+set_default com.apple.iCal CalendarSidebarShown -bool true
 
 # Safari - set up for development. Most of these write into Safari's protected
 # container, which requires "Full Disk Access" for Terminal in System Settings >
-# Privacy & Security > Full Disk Access; without it the writes fail. Track that
-# separately so we can point at the likely fix (any error output shows above).
+# Privacy & Security > Full Disk Access; without it the writes fail.
 echo "ℹ️  If Safari settings fail, grant Terminal 'Full Disk Access' in System Settings"
-safari_ok=true
-defaults write com.apple.Safari.SandboxBroker ShowDevelopMenu -bool true || safari_ok=false
-defaults write com.apple.Safari AutoFillPasswords -bool false || safari_ok=false
-defaults write com.apple.Safari AlwaysRestoreSessionAtLaunch -int 1 || safari_ok=false
-defaults write com.apple.Safari HomePage -string "https://hoku.nz/" || safari_ok=false
-defaults write com.apple.Safari IncludeDevelopMenu -bool true || safari_ok=false
-defaults write com.apple.Safari IncludeInternalDebugMenu -bool true || safari_ok=false
-defaults write com.apple.Safari WebKitDeveloperExtrasEnabledPreferenceKey -bool true || safari_ok=false
-defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled -bool true || safari_ok=false
-defaults write NSGlobalDomain WebKitDeveloperExtras -bool true || safari_ok=false
+set_default com.apple.Safari.SandboxBroker ShowDevelopMenu -bool true
+set_default com.apple.Safari AutoFillPasswords -bool false
+set_default com.apple.Safari AlwaysRestoreSessionAtLaunch -int 1
+set_default com.apple.Safari HomePage -string "https://hoku.nz/"
+set_default com.apple.Safari IncludeDevelopMenu -bool true
+set_default com.apple.Safari IncludeInternalDebugMenu -bool true
+set_default com.apple.Safari WebKitDeveloperExtrasEnabledPreferenceKey -bool true
+set_default com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled -bool true
+set_default NSGlobalDomain WebKitDeveloperExtras -bool true
 
 # Restore the caller's errexit setting now the best-effort writes are done.
 [[ -n $_errexit_was_set ]] && set -e
 unset _errexit_was_set
 
-if [[ "$safari_ok" != true ]]; then
+if (( ${#defaults_failed} )); then
   echo ""
-  echo "⚠️  Some Safari defaults failed to apply (see errors above)."
-  echo "   Safari settings usually require 'Full Disk Access' for Terminal:"
-  echo "   System Settings > Privacy & Security > Full Disk Access"
-  echo "   Add Terminal.app, then re-run 'dot'"
+  echo "⚠️  Some defaults failed to apply:"
+  for failed in "${defaults_failed[@]}"; do
+    echo "   - $failed"
+  done
+  if [[ "${defaults_failed[*]}" == *com.apple.Safari* ]]; then
+    echo "   Safari settings usually require 'Full Disk Access' for Terminal:"
+    echo "   System Settings > Privacy & Security > Full Disk Access"
+    echo "   Add Terminal.app, then re-run 'dot'"
+  fi
   echo ""
 fi
 

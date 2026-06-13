@@ -11,6 +11,15 @@ echo "› \033[00;34mCleaning up deprecated Homebrew taps\033[0m"
 brew untap homebrew/homebrew-cask-drivers 2>/dev/null || true
 brew untap homebrew/cask-drivers 2>/dev/null || true
 
+# apply-user-defaults (zero-sh/tap) was replaced by plain `defaults write`
+# calls in scripts/defaults.zsh. Uninstall the formula before untapping, or
+# brew refuses to drop a tap that still has installed formulae.
+if brew list --formula apply-user-defaults &>/dev/null; then
+    echo "  Uninstalling apply-user-defaults"
+    brew uninstall --force apply-user-defaults 2>/dev/null || true
+fi
+brew untap zero-sh/tap 2>/dev/null || true
+
 # Clean up Docker conflicts
 echo "› \033[00;34mCleaning up Docker conflicts\033[0m"
 

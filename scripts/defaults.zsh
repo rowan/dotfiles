@@ -5,6 +5,12 @@ osascript -e 'quit app "Safari"'
 
 echo "ℹ️  Applying macOS defaults"
 
+# Applying defaults is best-effort: a single rejected key (e.g. on a newer
+# macOS) should warn, not abort the whole `dot` run under `set -e`. Save the
+# caller's errexit state, disable it for the writes below, then restore it.
+[[ -o errexit ]] && _errexit_was_set=1 || _errexit_was_set=
+set +e
+
 # Turn on app auto-update
 defaults write com.apple.SoftwareUpdate AutomaticCheckEnabled -bool true
 defaults write com.apple.commerce AutoUpdate -bool true
@@ -12,7 +18,7 @@ defaults write com.apple.commerce AutoUpdate -bool true
 # Use AirDrop over every interface
 defaults write com.apple.NetworkBrowser BrowseAllInterfaces -int 1
 
-# Disable force click action on trackpad
+# Trackpad - enable three-finger tap to look up & data detectors
 defaults write com.apple.AppleMultitouchTrackpad TrackpadThreeFingerTapGesture -int 2
 
 # Dock - show on the right, no autohide
@@ -43,25 +49,30 @@ defaults write com.apple.iCal "display holidays calendar" -bool true
 defaults write com.apple.iCal CalendarListMiniMonthVisibleMonths -int 3
 defaults write com.apple.iCal CalendarSidebarShown -bool true
 
-# Safari - set up for development.
-# These write into Safari's protected container, so they require "Full Disk
-# Access" for Terminal in System Settings > Privacy & Security > Full Disk Access.
+# Safari - set up for development. Most of these write into Safari's protected
+# container, which requires "Full Disk Access" for Terminal in System Settings >
+# Privacy & Security > Full Disk Access; without it the writes fail. Track that
+# separately so we can point at the likely fix (any error output shows above).
 echo "ℹ️  If Safari settings fail, grant Terminal 'Full Disk Access' in System Settings"
 safari_ok=true
-defaults write com.apple.Safari.SandboxBroker ShowDevelopMenu -bool true 2>/dev/null || safari_ok=false
-defaults write com.apple.Safari AutoFillPasswords -bool false 2>/dev/null || safari_ok=false
-defaults write com.apple.Safari AlwaysRestoreSessionAtLaunch -int 1 2>/dev/null || safari_ok=false
-defaults write com.apple.Safari HomePage -string "https://hoku.nz/" 2>/dev/null || safari_ok=false
-defaults write com.apple.Safari IncludeDevelopMenu -bool true 2>/dev/null || safari_ok=false
-defaults write com.apple.Safari IncludeInternalDebugMenu -bool true 2>/dev/null || safari_ok=false
-defaults write com.apple.Safari WebKitDeveloperExtrasEnabledPreferenceKey -bool true 2>/dev/null || safari_ok=false
-defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled -bool true 2>/dev/null || safari_ok=false
-defaults write NSGlobalDomain WebKitDeveloperExtras -bool true 2>/dev/null || safari_ok=false
+defaults write com.apple.Safari.SandboxBroker ShowDevelopMenu -bool true || safari_ok=false
+defaults write com.apple.Safari AutoFillPasswords -bool false || safari_ok=false
+defaults write com.apple.Safari AlwaysRestoreSessionAtLaunch -int 1 || safari_ok=false
+defaults write com.apple.Safari HomePage -string "https://hoku.nz/" || safari_ok=false
+defaults write com.apple.Safari IncludeDevelopMenu -bool true || safari_ok=false
+defaults write com.apple.Safari IncludeInternalDebugMenu -bool true || safari_ok=false
+defaults write com.apple.Safari WebKitDeveloperExtrasEnabledPreferenceKey -bool true || safari_ok=false
+defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled -bool true || safari_ok=false
+defaults write NSGlobalDomain WebKitDeveloperExtras -bool true || safari_ok=false
+
+# Restore the caller's errexit setting now the best-effort writes are done.
+[[ -n $_errexit_was_set ]] && set -e
+unset _errexit_was_set
 
 if [[ "$safari_ok" != true ]]; then
   echo ""
-  echo "⚠️  Some Safari defaults failed to apply."
-  echo "   Safari settings require 'Full Disk Access' for Terminal:"
+  echo "⚠️  Some Safari defaults failed to apply (see errors above)."
+  echo "   Safari settings usually require 'Full Disk Access' for Terminal:"
   echo "   System Settings > Privacy & Security > Full Disk Access"
   echo "   Add Terminal.app, then re-run 'dot'"
   echo ""

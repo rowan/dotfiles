@@ -54,3 +54,27 @@ elif [[ ! -f "$CONFIG_FILE" ]]; then
     echo "   Edit this file to add your project paths for this machine."
     echo ""
 fi
+
+# Additive merge: keep the repo baseline in sync on existing machines.
+# Appends any project path from default-projects that the live config is
+# missing. Preserves machine-local entries and ordering; never removes.
+if [[ -f "$CONFIG_FILE" ]] && [[ -f "$DEFAULT_FILE" ]]; then
+    added=0
+    while IFS= read -r line || [[ -n "$line" ]]; do
+        # Skip blank lines and comments
+        [[ -z "$line" || "$line" =~ ^[[:space:]]*# ]] && continue
+        # Trim leading and trailing whitespace
+        entry="${line#"${line%%[![:space:]]*}"}"
+        entry="${entry%"${entry##*[![:space:]]}"}"
+        [[ -z "$entry" ]] && continue
+        # Append only if not already present as an exact line
+        if ! grep -qxF "$entry" "$CONFIG_FILE"; then
+            echo "$entry" >> "$CONFIG_FILE"
+            echo "Added $entry to $CONFIG_FILE"
+            added=1
+        fi
+    done < "$DEFAULT_FILE"
+    if [[ "$added" -eq 1 ]]; then
+        echo "Merged new baseline projects into $CONFIG_FILE"
+    fi
+fi

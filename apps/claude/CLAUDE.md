@@ -76,6 +76,10 @@ Invoke by name when relevant. Don't wait to be asked when the situation clearly 
 - macOS, VS Code, GitHub
 - Main stacks: Ruby on Rails, SwiftUI, Next.js for standalone apps, Hugo for static sites
 
+## Tools
+
+- Dropbox files are synced locally. Read them directly from disk rather than downloading via the Dropbox MCP. The Hoku Group namespace root is `/Users/[machine]/Hoku Group Dropbox/`. The `~/Dropbox (Hoku Group)` symlink points at the `Rowan Simpson` subfolder, not the root, so don't use it for these paths. Fall back to the MCP only if a very recent file hasn't synced yet
+
 ## More
 
 - Project-specific context lives in `AGENTS.md` at the repo root, imported by a minimal `CLAUDE.md`

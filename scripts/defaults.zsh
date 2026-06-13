@@ -1,15 +1,66 @@
 # Sets macOS defaults
 
-# Kill apps that are updateds
+# Kill apps we're about to reconfigure
 osascript -e 'quit app "Safari"'
 
-# Apply defaults
-# Note: Safari settings require "Full Disk Access" for Terminal in
-# System Settings > Privacy & Security > Full Disk Access
+echo "ℹ️  Applying macOS defaults"
+
+# Turn on app auto-update
+defaults write com.apple.SoftwareUpdate AutomaticCheckEnabled -bool true
+defaults write com.apple.commerce AutoUpdate -bool true
+
+# Use AirDrop over every interface
+defaults write com.apple.NetworkBrowser BrowseAllInterfaces -int 1
+
+# Disable force click action on trackpad
+defaults write com.apple.AppleMultitouchTrackpad TrackpadThreeFingerTapGesture -int 2
+
+# Dock - show on the right, no autohide
+defaults write com.apple.dock orientation -string "right"
+defaults write com.apple.dock autohide -bool false
+
+# Finder - don't show volumes on desktop, default to column view, empty trash securely
+defaults write com.apple.finder ShowHardDrivesOnDesktop -bool false
+defaults write com.apple.finder ShowExternalHardDrivesOnDesktop -bool false
+defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool false
+defaults write com.apple.finder FXPreferredViewStyle -string "clmv"
+defaults write com.apple.finder EmptyTrashSecurely -bool true
+
+# Don't create .DS_Store files on network or USB volumes
+defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
+defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true
+
+# Save files to disk (rather than iCloud) by default
+defaults write NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false
+
+# Photos - don't open automatically when devices are plugged in
+defaults write com.apple.ImageCapture disableHotPlug -bool true
+
+# Calendar
+defaults write com.apple.iCal "TimeZone support enabled" -bool true
+defaults write com.apple.iCal "display birthdays calendar" -bool true
+defaults write com.apple.iCal "display holidays calendar" -bool true
+defaults write com.apple.iCal CalendarListMiniMonthVisibleMonths -int 3
+defaults write com.apple.iCal CalendarSidebarShown -bool true
+
+# Safari - set up for development.
+# These write into Safari's protected container, so they require "Full Disk
+# Access" for Terminal in System Settings > Privacy & Security > Full Disk Access.
 echo "ℹ️  If Safari settings fail, grant Terminal 'Full Disk Access' in System Settings"
-if ! apply-user-defaults apps/system/user-defaults.yaml --verbose; then
+safari_ok=true
+defaults write com.apple.Safari.SandboxBroker ShowDevelopMenu -bool true 2>/dev/null || safari_ok=false
+defaults write com.apple.Safari AutoFillPasswords -bool false 2>/dev/null || safari_ok=false
+defaults write com.apple.Safari AlwaysRestoreSessionAtLaunch -int 1 2>/dev/null || safari_ok=false
+defaults write com.apple.Safari HomePage -string "https://hoku.nz/" 2>/dev/null || safari_ok=false
+defaults write com.apple.Safari IncludeDevelopMenu -bool true 2>/dev/null || safari_ok=false
+defaults write com.apple.Safari IncludeInternalDebugMenu -bool true 2>/dev/null || safari_ok=false
+defaults write com.apple.Safari WebKitDeveloperExtrasEnabledPreferenceKey -bool true 2>/dev/null || safari_ok=false
+defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled -bool true 2>/dev/null || safari_ok=false
+defaults write NSGlobalDomain WebKitDeveloperExtras -bool true 2>/dev/null || safari_ok=false
+
+if [[ "$safari_ok" != true ]]; then
   echo ""
-  echo "⚠️  Some defaults failed to apply."
+  echo "⚠️  Some Safari defaults failed to apply."
   echo "   Safari settings require 'Full Disk Access' for Terminal:"
   echo "   System Settings > Privacy & Security > Full Disk Access"
   echo "   Add Terminal.app, then re-run 'dot'"

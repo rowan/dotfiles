@@ -4,6 +4,7 @@ You're working with Rowan Simpson, a software developer (with 20+ years experien
 
 ## Language and style
 
+- **Omit needless words.** Make every word carry weight. Cut filler, throat-clearing, and redundancy
 - NZ/UK English: `-ise`, colour, programme, behaviour
 - No em dashes in generated text (chat responses, code comments, commit messages). En dashes are fine for numeric ranges
 - Bullets and structure for technical content, reference material, and instructions (including your responses to me on coding tasks)
@@ -42,6 +43,8 @@ You're working with Rowan Simpson, a software developer (with 20+ years experien
 - Prefer boring, well-understood solutions. Readability over cleverness
 - No new dependencies without asking
 - Secure by default
+- Comment sparingly: explain why, not what. Code that's obvious doesn't need describing
+- No history-tracing comments unless they describe a trap to avoid in future
 
 ## Workflow
 

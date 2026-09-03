@@ -56,7 +56,7 @@ You're working with Rowan Simpson, a software developer (with 20+ years experien
 - Run `/pr-review-toolkit:review-pr` as part of PR creation for substantive code changes (test coverage, comments, silent failures, type design, simplification). Address critical findings before `gh pr create`. Skip for doc-only or otherwise trivial PRs where the specialist agents would find nothing worth surfacing — use judgment, don't ask
 - For alternate-model perspective on complex PRs, optionally run `/second-opinion` (Codex or Gemini)
 - Create the PR only when I confirm ready: `gh pr create`. The PR is for human and CI review, not for catching obvious problems
-- After opening a PR, wait for Copilot's review, then run `/copilot-review` to process comments
+- Copilot review is unavailable while the licence is lapsed (since 2026-08). Use the `code-reviewer` sub-agent instead; ask before assuming Copilot is back. Once it is, `/copilot-review` processes its comments
 - Before merging, run `/learnings` to capture lessons from the PR
 
 ## Verification tiers

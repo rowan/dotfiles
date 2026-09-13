@@ -1,36 +1,26 @@
 ---
-description: Capture lessons from the current PR and conversation into LEARNINGS.md.
+description: Capture lessons from the current PR and conversation into LEARNINGS.md, consolidating and pruning the file as you go.
 allowed-tools: ["Bash", "Read", "Edit", "Write", "Grep", "Glob"]
 ---
 
 > **Note:** The name "learnings" is used ironically. The correct word is "lessons". But corporate jargon has infected the industry, so here we are.
 
-You are reviewing the current PR and conversation to capture useful lessons in `/LEARNINGS.md`.
+You are reviewing the current PR and conversation to capture useful lessons in `/LEARNINGS.md`,
+and leaving the file smaller and sharper than a pure append would.
 
 ## When to use
 
-Run this command just before merging a PR, to capture insights that could help future work.
+Run this command just before merging a PR.
 
-## What to capture
+## The one rule that keeps the file usable
 
-Review the full conversation history and look for:
+**One section per topic. If the topic exists, add to it.**
 
-1. **Code review feedback** - Issues identified during review that required fixes
-2. **Backtracking** - Things the user asked to undo or do materially differently
-3. **Non-obvious solutions** - Approaches that weren't immediately apparent
-4. **Project-specific patterns** - Conventions or patterns discovered during this work
-5. **Loops** - Instances where we spun wheels trying to solve a problem
-6. **Time wasting** - Situations where we stopped and asked the user for a decision where we could have resolved the question ourselves with a bit more work
-7. **False assumptions** - Things we assumed that turned out to be wrong (mental model errors)
-8. **Gotchas** - Subtle bugs or edge cases that could bite again
-9. **Tool/command discoveries** - Useful CLI flags, APIs, or approaches that weren't obvious
+Never create `## Testing (continued)`, `## Testing (PR #123)`, or any other variant of a heading
+that is already there. A per-PR heading mixes two taxonomies, topic and chronology, and a file
+carrying both grows a section per PR instead of a section per subject.
 
-Focus on lessons that are:
-- Reusable in future work
-- Not already documented elsewhere (CLAUDE.md, README, etc.)
-- Specific enough to be actionable
-
-Skip trivial things like typo fixes or simple formatting issues.
+Appending is always the easier move in the moment. Do not take it.
 
 ## Step 1: Get PR context
 
@@ -38,73 +28,126 @@ Skip trivial things like typo fixes or simple formatting issues.
 gh pr view --json number,title,body,headRefName
 ```
 
-## Step 2: Check for existing LEARNINGS.md
+## Step 2: Read LEARNINGS.md in full
 
-Look for `/LEARNINGS.md` in the repository root.
+If it doesn't exist, create it with the structure at the bottom of this file and skip to Step 4.
 
-**If the file exists:**
-- Read it first
-- Understand the existing structure and content
-- Add new learnings that complement (not duplicate) existing ones
-- Consider consolidating related items
+Read the whole thing, not the headings. You cannot merge into a section you haven't read, and
+you cannot spot a duplicate of an entry you've only skimmed past.
 
-**If the file doesn't exist:**
-- Create it with the introduction below, then add learnings
+## Step 3: Consolidate and prune — before adding anything
+
+This step is required on every run, not when the file "feels" messy. It is cheap when done each
+time and expensive when deferred.
+
+**Find duplicate headings mechanically:**
+
+```bash
+grep -c '^## ' LEARNINGS.md                  # total headings
+grep '^## ' LEARNINGS.md | sort -u | wc -l   # distinct headings
+```
+
+Different numbers mean duplicate or `(continued)` sections. Merge them into one section per topic
+before going further.
+
+**Find duplicate entries.** Scan the bold titles for two entries making the same claim. Merge them
+into one, keeping the strongest evidence from each — an entry that says "this bit three times, in
+these three ways" is more persuasive than three entries that each say it once.
+
+**Prune.** An entry earns removal when any of these is true:
+
+- It is now documented in `AGENTS.md`, `CLAUDE.md`, or the README. Those are read every session;
+  LEARNINGS is not. Keep any *judgement* the docs omit, drop the mechanics they cover.
+- It is about a dependency, API, or tool no longer in the project.
+- It describes a migration that has since completed.
+- A later entry supersedes it.
+
+Removing something real is worse than keeping something stale, so when in doubt keep it — but
+apply the four triggers honestly, because a file nobody trusts to be current is a file nobody reads.
+
+## Step 4: Review the conversation
+
+Look for:
+
+1. **Review feedback** — issues found in review that required fixes
+2. **Backtracking** — things the user asked to undo or do differently
+3. **False assumptions** — things asserted confidently that turned out wrong. These are the most
+   valuable entries in the file and the easiest to leave out, because writing one means recording
+   a mistake.
+4. **Non-obvious solutions** — approaches that weren't apparent up front
+5. **Project-specific patterns** — conventions discovered during the work
+6. **Loops and wheel-spinning** — where time went and why
+7. **Questions escalated that you could have answered** — a file read or a query that would have
+   settled it
+8. **Gotchas** — subtle bugs or edge cases that could bite again
+9. **Tool discoveries** — flags, APIs, or approaches that weren't obvious
+
+For each candidate, ask:
+
+- Would this change what someone does next time? If not, skip it.
+- Is it already in the file, or in `AGENTS.md` / `CLAUDE.md`?
+- Is it specific enough to act on? "Be careful with X" is not a lesson.
+
+Skip typos, formatting, and anything a compiler would have caught.
+
+## Step 5: Add the new lessons
+
+Into the existing sections. Create a new section only when the topic genuinely isn't represented.
+
+**Entry shape — the title is the lesson, the body is the evidence:**
+
+```markdown
+- **Name the lesson as a claim or an instruction**: then the evidence, tightly. Keep the specific
+  number, symbol, or error string when that is what makes it persuasive; cut the narrative once the
+  lesson stands without it.
+```
+
+A reader scanning bold titles should get the lesson without the bodies. If the title only makes
+sense after reading the body, the title is wrong.
+
+Cut the incident retelling. "We spent two hours discovering that..." is throat-clearing; the lesson
+is what you discovered.
+
+## Step 6: Check nothing was lost
+
+Consolidating silently destroys value if you let it. Diff the entry titles:
+
+```bash
+# before editing
+sed -n 's/^- \*\*\([^*]*\)\*\*.*/\1/p' LEARNINGS.md | sort > /tmp/learnings-before.txt
+# after editing
+sed -n 's/^- \*\*\([^*]*\)\*\*.*/\1/p' LEARNINGS.md | sort > /tmp/learnings-after.txt
+diff /tmp/learnings-before.txt /tmp/learnings-after.txt
+```
+
+Account for every removed title as **merged into X** or **pruned because Y**. Anything you cannot
+account for was dropped by accident — restore it. Reworded titles will show as a remove plus an
+add; confirm each pair is the same lesson rather than assuming it.
+
+## Step 7: Report
+
+- How many lessons were added, and under which topics
+- What was merged, and what was pruned with the reason
+- The before/after entry and heading counts
+- Anything you judged too marginal to include, so the user can overrule you
+
+Do not commit. The user reviews first.
 
 ## File structure
+
+For a file that doesn't exist yet:
 
 ```markdown
 # Learnings
 
-Lessons captured from past work to inform future development. Updated when merging PRs.
+Lessons from past work, kept because they were expensive to learn. Updated when merging PRs.
+
+One section per topic — add to the section, don't append a new one. Anything that belongs in
+`AGENTS.md` (how to run the build, the lint gate, the release train) lives there instead.
 
 ---
 
-## [Topic or Area]
+## [Topic]
 
-- **Learning title**: Brief description of what was learned and why it matters.
-
+- **The lesson, as a claim or instruction**: the evidence, tightly.
 ```
-
-## Step 3: Review the conversation
-
-Scan the full conversation for:
-
-1. **Problems caught in review** - What was wrong? What was the fix? What's the takeaway?
-2. **User corrections** - Where did the user redirect the approach? Why was the original approach wrong?
-3. **Surprises** - Anything unexpected about the codebase, tools, or approach?
-
-For each potential learning, ask:
-- Is this specific enough to be useful?
-- Would this help avoid a similar mistake?
-- Is this already documented elsewhere?
-
-## Step 4: Update LEARNINGS.md
-
-Write learnings that are:
-- **Concise** - One or two sentences each
-- **Actionable** - Clear what to do differently
-- **Contextual** - Include enough context to understand why
-
-Group related learnings under topic headings.
-
-**Example learnings:**
-
-```markdown
-## Code style
-
-- **Prefer symlinks over copies for dotfiles**: Symlinked config files stay in sync with the repo automatically. Use `ln -s` instead of `cp` for anything that might change.
-
-## GitHub API
-
-- **GraphQL filtering happens client-side**: GitHub's GraphQL API returns all results; filter in your code after fetching, not in the query.
-```
-
-## Step 5: Report to the user
-
-Summarise:
-- How many learnings were added
-- What topics they cover
-- Any existing learnings that were updated or consolidated
-
-The changes are not committed automatically. The user should review before committing.

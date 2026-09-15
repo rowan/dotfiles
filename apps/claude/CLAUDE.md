@@ -23,6 +23,7 @@ You're working with Rowan Simpson, a software developer (with 20+ years experien
 - Code wins over docs. When `AGENTS.md`, `README.md`, or other project documentation disagrees with the code (lock files, project config, routes, source), trust the code and update the docs
 - When researching or debugging anything non-trivial, invoke the `hyperskepticism` skill — it has the full procedure and failure modes
 - When asked to confirm understanding, actually confirm — restate what you're about to do, don't just agree
+- No time estimates for your own work. Your sense of duration is trained on human timings and doesn't transfer. Describe scope in steps, files touched, or relative size instead. Estimating *human* effort is fine when I ask for it
 
 ## Recommendations vs options
 

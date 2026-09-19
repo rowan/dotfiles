@@ -1,9 +1,18 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "extraKnownMarketplaces": {
+    "swiftui-agent-skill": {
+      "source": {
+        "source": "github",
+        "repo": "twostraws/swiftui-agent-skill"
+      }
+    }
+  },
   "enabledPlugins": {
     "swift-lsp@claude-plugins-official": true,
     "frontend-design@claude-plugins-official": true,
-    "pr-review-toolkit@claude-plugins-official": true
+    "pr-review-toolkit@claude-plugins-official": true,
+    "swiftui-pro@swiftui-agent-skill": true
   },
   "skipDangerousModePermissionPrompt": true,
   "hooks": {

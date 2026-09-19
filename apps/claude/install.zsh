@@ -83,7 +83,8 @@ else
     echo "\033[00;33m  Warning: failed to create $LIVE from $SRC\033[0m"
 fi
 
-# Install Claude Code plugins listed in settings.enabledPlugins.
+# Add third-party marketplaces, then install the plugins listed in
+# settings.enabledPlugins.
 # (The CLI itself auto-updates on launch, so we don't call `claude update` here.)
 # We install every listed plugin; the true/false value is used by Claude
 # Code at runtime, not here.
@@ -93,6 +94,29 @@ if ! command -v claude &> /dev/null; then
 elif ! command -v jq &> /dev/null; then
     echo "\033[00;33m  Warning: jq not found, skipping plugin installation\033[0m"
 else
+    # Declaring a marketplace in extraKnownMarketplaces only marks it as known
+    # and trusted; the CLI still has to clone it once before its plugins can be
+    # installed. `marketplace add` is idempotent, so run it every time.
+    #
+    # Trap: do not add a "ref" to a github source in settings.json. The CLI has no
+    # way to pass one (`add owner/repo@tag` is read as a repo name), and a bare
+    # `add owner/repo` is then rejected for not matching the declared source.
+    # Claude Code does not clone declared marketplaces on its own either, so a
+    # pinned marketplace cannot be provisioned at all. Marketplaces track their
+    # default branch; pin by vendoring the skill instead (see AGENTS.md).
+    jq -r '.extraKnownMarketplaces // {} | to_entries[]
+           | if .value.source.source == "github" then .value.source.repo
+             else "!\(.key)" end' "$SRC" | while IFS= read -r repo; do
+        if [[ "$repo" == "!"* ]]; then
+            echo "\033[00;33m  Warning: marketplace ${repo#!} has a source type this script does not add automatically\033[0m"
+        elif output=$(claude plugin marketplace add "$repo" 2>&1); then
+            echo "  Marketplace ready: $repo"
+        else
+            echo "\033[00;33m  Warning: failed to add marketplace $repo:\033[0m"
+            echo "$output" | sed 's/^/    /'
+        fi
+    done
+
     jq -r '.enabledPlugins // {} | keys[]' "$SRC" | while IFS= read -r plugin; do
         if output=$(claude plugin install "$plugin" 2>&1); then
             echo "  Installed: $plugin"

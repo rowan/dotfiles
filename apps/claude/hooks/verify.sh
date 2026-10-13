@@ -43,7 +43,9 @@ git rev-parse --git-dir >/dev/null 2>&1 || exit 0
 # Nothing changed, nothing to verify. Use --porcelain so untracked files
 # count too — otherwise a brand-new file on its own would short-circuit
 # the hook before changed_files() got a chance to lint it.
-if [[ -z "$(git status --porcelain 2>/dev/null)" ]]; then
+# A project-local verify.sh diffs against its branch base, so committed work
+# still needs checking on a clean tree; it gets no early exit.
+if [[ ! -x .claude/verify.sh && -z "$(git status --porcelain 2>/dev/null)" ]]; then
   exit 0
 fi
 

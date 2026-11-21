@@ -1,5 +1,8 @@
 echo "Running \033[00;34m${HOME}/.zshrc\033[0m"
 
+# Nested shells (VS Code, tmux, Claude Code) re-run every PATH prepend
+typeset -U path PATH
+
 # assumes this code is run from ~/.dotfiles
 export DOTFILES=$HOME/.dotfiles
 

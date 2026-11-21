@@ -1,1 +1,1 @@
-export PATH="$DOTFILES/bin:./bin:$PATH"
+export PATH="$DOTFILES/bin:$PATH"

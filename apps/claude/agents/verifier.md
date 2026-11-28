@@ -13,6 +13,7 @@ Assume the writer is overconfident. Your job is to catch that.
 
 1. Identify what changed: `git status`, `git diff`, `git diff --staged`, `git diff main...HEAD` as appropriate
 2. Run `.claude/verify.sh full` if it exists. If it doesn't, find the canonical commands in `AGENTS.md` and run them in order: type-check, lint, full test suite, build
+   - If the diff deletes, renames or moves declarations and the script has an `analyze` mode (`AGENTS.md` documents it), run `.claude/verify.sh analyze` as well; it is a clean build plus SwiftLint's `unused_declaration` analyzer
 3. If any step fails, stop and report. Don't try to fix
 4. If all mechanical steps pass, probe for obvious failure modes the writer likely didn't test:
    - Empty inputs, nil values, empty collections

@@ -90,7 +90,20 @@ This app has a richer structure than the generic app pattern. `install.zsh` crea
 - `agents/` - Claude Code sub-agents (symlinked to `~/.claude/agents/`)
 - `hooks/` - Claude Code hook scripts, including the Stop hook `verify.sh` and its smoke test (symlinked to `~/.claude/hooks/`)
 - `settings.json` - Claude Code settings; merged (not symlinked) into `~/.claude/settings.json` via `jq` so transient keys Claude Code writes back (e.g. `feedbackSurveyState`) are preserved. The repo is source of truth for every other key, including `enabledPlugins`
-- `install.zsh` - Sets up the symlinks and runs the merge
+- `install.zsh` - Sets up the symlinks, runs the merge, adds marketplaces and installs plugins
+
+#### Adding a skill
+
+Four routes, in order of preference:
+
+1. **Upstream ships a plugin** (has `.claude-plugin/marketplace.json`) - declare the marketplace in `settings.json` under `extraKnownMarketplaces` and the plugin under `enabledPlugins` as `<plugin>@<marketplace>`. `install.zsh` clones the marketplace and installs it. Nothing is copied into this repo, and `claude plugin marketplace update` picks up upstream changes.
+
+   **This route cannot be pinned.** The settings schema accepts a `ref` on a github source, but nothing can then provision it: the CLI has no flag to pass a ref, a bare `claude plugin marketplace add owner/repo` is rejected for not matching the declared source, and Claude Code does not clone declared marketplaces by itself. So a marketplace tracks its default branch and `install.zsh` re-adds it on every `dot` run. Upstream's current skill text loads into every session as instructions, and a change there arrives without review. That is an ongoing trust decision in the maintainer, not a one-time check - re-read the upstream repo periodically, and prefer route 3/4 for anything where an unreviewed change would matter
+2. **Own skill** - a directory under `apps/claude/skills/<name>/` with `SKILL.md`. Live immediately via the symlink, no `dot` run needed
+3. **Third-party skill with no plugin manifest** - vendor it: copy the files into `apps/claude/skills/<name>/`, rewrite the `description` in your own words (it is the only thing the model sees when deciding to load the skill), and record source URL, upstream commit and licence in an HTML comment under the frontmatter
+4. **Third-party skill that needs changing** - vendor it even if upstream ships a plugin, because a plugin lives in `~/.claude/plugins/cache/` and is overwritten on update. `skillOverrides` in `settings.json` controls visibility only and does not apply to plugin skills, so there is no way to layer edits on top of route 1. Say in the provenance comment what was changed and why
+
+The directory name must match the frontmatter `name`. Vendored body text is left as upstream wrote it, US spelling included; only the description, deliberate adaptations and the provenance comment follow this repo's conventions.
 
 ### Loading Order
 

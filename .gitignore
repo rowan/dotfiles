@@ -5,3 +5,7 @@
 /apps/git/gitconfig.local.symlink
 /apps/git/gitconfig.symlink
 /.claude/settings.local.json
+
+# Skills synced from the claude.ai account into ~/.claude/skills (a symlink into
+# this repo). Not ours to version, and some reference private Notion workspaces.
+/apps/claude/skills/synced/

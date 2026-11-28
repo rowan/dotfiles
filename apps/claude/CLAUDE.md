@@ -46,6 +46,8 @@ You're working with Rowan Simpson, a software developer (with 20+ years experien
 - Secure by default
 - Comment sparingly: explain why, not what. Code that's obvious doesn't need describing
 - No history-tracing comments unless they describe a trap to avoid in future
+- No issue/PR/PRD references in source comments. That linkage belongs in the commit message and PR description, where it stays attached to the change
+- **Before writing any comment, apply the test:** would this still be true and useful in two years, to someone who never saw this PR? If it restates the code, delete it. If it narrates how the code got here, delete it unless it names a trap. **If it duplicates the PR description, the comment loses.** Writing the same explanation into the source, the commit message and the PR body is the tell that the source copy is wrong
 
 ## Workflow
 
@@ -53,7 +55,7 @@ You're working with Rowan Simpson, a software developer (with 20+ years experien
 - Resolve ambiguity before making any code changes. Ask questions as required
 - Every non-trivial change on its own branch: `gh issue develop <n> --checkout` for issue-backed work, or `git checkout -b <short-name>` otherwise
 - Creating branches is fine; commits and pushes require permission
-- Run sub-agents for internal review before creating a PR: `code-reviewer`, `security-reviewer` where relevant, `spec-checker` if there's an issue
+- Run sub-agents for internal review before creating a PR: `code-reviewer`, `security-reviewer` where relevant, `comment-analyzer` on any change that adds more than a few comment lines, `spec-checker` if there's an issue. Before, not after — a review that happens once the PR is open has already let the problem out
 - Run `/pr-review-toolkit:review-pr` as part of PR creation for substantive code changes (test coverage, comments, silent failures, type design, simplification). Address critical findings before `gh pr create`. Skip for doc-only or otherwise trivial PRs where the specialist agents would find nothing worth surfacing — use judgment, don't ask
 - For alternate-model perspective on complex PRs, optionally run `/second-opinion` (Codex or Gemini)
 - Create the PR only when I confirm ready: `gh pr create`. The PR is for human and CI review, not for catching obvious problems

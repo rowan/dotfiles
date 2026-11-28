@@ -430,6 +430,104 @@ else
   fail=$((fail+1))
 fi
 
+# SwiftLint is found on PATH, not in the project, so tests 14 and 15 put a
+# stub first on a PATH that omits /usr/local/bin and /opt/homebrew/bin, keeping
+# any real swiftlint out.
+make_swift_repo() {
+  git init -q
+  git config user.email "test@test"
+  git config user.name "test"
+  echo "// swift-tools-version:5.9" > Package.swift
+  echo "let x = 1" > Foo.swift
+  git add -A
+  git commit -q -m "init"
+  echo "let y = 2" >> Foo.swift
+}
+
+echo
+echo "Test 14: Swift project with failing swiftlint exits 2 and passes --force-exclude"
+swiftdir=$(mktemp -d)
+cleanup_dirs+=("$swiftdir")
+swift_shim_dir=$(mktemp -d)
+cleanup_dirs+=("$swift_shim_dir")
+cat > "$swift_shim_dir/swiftlint" <<EOF
+#!/usr/bin/env bash
+echo "\$@" > "$swiftdir/swiftlint_args"
+echo "Foo.swift:2:1: error: synthetic swiftlint violation"
+exit 2
+EOF
+chmod +x "$swift_shim_dir/swiftlint"
+if pushd "$swiftdir" >/dev/null; then
+  make_swift_repo
+
+  exit_code=0
+  stderr_output=$(echo '{"stop_hook_active":false}' | PATH="$swift_shim_dir:/usr/bin:/bin" CLAUDE_PROJECT_DIR="$swiftdir" "$HOOK" 2>&1 >/dev/null) || exit_code=$?
+  check "swiftlint failure blocks" 2 "$exit_code"
+  check_contains "stderr labelled [swiftlint]" "[swiftlint]" "$stderr_output"
+  check_contains "stderr contains swiftlint output" "synthetic swiftlint violation" "$stderr_output"
+  if [[ -f swiftlint_args ]]; then
+    args=$(cat swiftlint_args)
+    check_contains "swiftlint received --force-exclude" "--force-exclude" "$args"
+    check_contains "swiftlint received Foo.swift" "Foo.swift" "$args"
+  else
+    echo "  ✗ swiftlint_args file missing: shim not invoked"
+    fail=$((fail+1))
+  fi
+  popd >/dev/null
+else
+  echo "  ✗ pushd failed for test 14"
+  fail=$((fail+1))
+fi
+
+echo
+echo "Test 15: swiftlint 'No lintable files found' (all changes excluded) passes"
+swiftexcldir=$(mktemp -d)
+cleanup_dirs+=("$swiftexcldir")
+swift_excl_shim_dir=$(mktemp -d)
+cleanup_dirs+=("$swift_excl_shim_dir")
+cat > "$swift_excl_shim_dir/swiftlint" <<'EOF'
+#!/usr/bin/env bash
+echo "Error: No lintable files found at paths: 'Foo.swift'" >&2
+exit 1
+EOF
+chmod +x "$swift_excl_shim_dir/swiftlint"
+if pushd "$swiftexcldir" >/dev/null; then
+  make_swift_repo
+
+  exit_code=0
+  stderr_output=$(echo '{"stop_hook_active":false}' | PATH="$swift_excl_shim_dir:/usr/bin:/bin" CLAUDE_PROJECT_DIR="$swiftexcldir" "$HOOK" 2>&1 >/dev/null) || exit_code=$?
+  check "all-excluded change set passes" 0 "$exit_code"
+  popd >/dev/null
+else
+  echo "  ✗ pushd failed for test 15"
+  fail=$((fail+1))
+fi
+
+echo
+echo "Test 16: swiftlint failures other than 'No lintable files found' still block"
+swiftnegdir=$(mktemp -d)
+cleanup_dirs+=("$swiftnegdir")
+swift_neg_shim_dir=$(mktemp -d)
+cleanup_dirs+=("$swift_neg_shim_dir")
+if pushd "$swiftnegdir" >/dev/null; then
+  make_swift_repo
+  # Exit 1 without the phrase: a real error, not an excluded change set.
+  printf '#!/usr/bin/env bash\necho "Error: synthetic config error" >&2\nexit 1\n' > "$swift_neg_shim_dir/swiftlint"
+  chmod +x "$swift_neg_shim_dir/swiftlint"
+  exit_code=0
+  echo '{"stop_hook_active":false}' | PATH="$swift_neg_shim_dir:/usr/bin:/bin" CLAUDE_PROJECT_DIR="$swiftnegdir" "$HOOK" >/dev/null 2>&1 || exit_code=$?
+  check "exit 1 without the phrase blocks" 2 "$exit_code"
+  # Violations exit 2; mentioning the phrase must not turn them into a pass.
+  printf '#!/usr/bin/env bash\necho "Foo.swift:1:1: warning: No lintable files found"\nexit 2\n' > "$swift_neg_shim_dir/swiftlint"
+  exit_code=0
+  echo '{"stop_hook_active":false}' | PATH="$swift_neg_shim_dir:/usr/bin:/bin" CLAUDE_PROJECT_DIR="$swiftnegdir" "$HOOK" >/dev/null 2>&1 || exit_code=$?
+  check "exit 2 mentioning the phrase blocks" 2 "$exit_code"
+  popd >/dev/null
+else
+  echo "  ✗ pushd failed for test 16"
+  fail=$((fail+1))
+fi
+
 echo
 echo "Result: $pass passed, $fail failed"
 [[ $fail -eq 0 ]] || exit 1

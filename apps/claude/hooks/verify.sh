@@ -78,6 +78,21 @@ run() {
   fi
 }
 
+# SwiftLint over named files. `--force-exclude` so a file the project's
+# `.swiftlint.yml` excludes stays excluded when it is named on the command
+# line, which SwiftLint otherwise ignores. When every changed file is excluded
+# SwiftLint exits 1 with "No lintable files found"; that is a pass.
+swiftlint_changed() {
+  local output rc
+  output=$(swiftlint --quiet --force-exclude "$@" 2>&1)
+  rc=$?
+  if (( rc == 1 )) && [[ "$output" == *"No lintable files found"* ]]; then
+    return 0
+  fi
+  [[ -n "$output" ]] && printf '%s\n' "$output"
+  return $rc
+}
+
 # Print working-tree paths matching any of the given space-separated
 # extensions, one per line. Scope is staged + unstaged + untracked, with
 # deletions excluded. Working tree (not main..HEAD) keeps the list bounded
@@ -154,7 +169,7 @@ else
         [[ -n "$f" ]] && files+=("$f")
       done < <(changed_files "swift")
       if (( ${#files[@]} > 0 )); then
-        run "swiftlint" swiftlint --quiet "${files[@]}"
+        run "swiftlint" swiftlint_changed "${files[@]}"
       fi
     fi
   fi

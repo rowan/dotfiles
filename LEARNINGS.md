@@ -6,13 +6,11 @@ Lessons captured from past work to inform future development. Updated when mergi
 
 ## Dotfiles patterns
 
-- **Prefer symlinks over copies**: Symlinked config files stay in sync with the repo automatically. Use `ln -s` instead of `cp` for anything that might change. This applies to skills directories, not just individual config files.
+- **Prefer symlinks over copies, except for files the app writes back to**: Symlinked config files stay in sync with the repo automatically. Use `ln -s` instead of `cp` for anything that might change, skills directories included. The exception is a file the app writes to itself: Claude Code writes `feedbackSurveyState` into `~/.claude/settings.json`, so a symlink turns every timestamp update into git churn. Merge those in place with `jq`, preserving an explicit allowlist of transient keys.
 
 - **Updating a script doesn't apply the change**: If you modify an install script (e.g., changing `cp` to `ln -s`), the old state persists until you actually run the script. Don't assume the change is live just because you committed it.
 
 - **Timestamp backup filenames beat numbered suffixes**: `file.bak.$(date +%Y%m%d-%H%M%S)` is self-documenting and can't clobber prior backups. Numbered suffixes (`.bak.1`, `.bak.2`) require exists-checking and can race.
-
-- **`settings.json` is a bad symlink target when the app writes back**: Claude Code writes `feedbackSurveyState` to `~/.claude/settings.json` on its own. If symlinked into the dotfiles repo, every timestamp update creates git churn. Use `jq` to merge in place, preserving an explicit allowlist of transient keys.
 
 - **Verify a replaced tool's actual behaviour against live state, not its config**: When swapping `apply-user-defaults` (YAML) for plain `defaults write`, reading live `defaults read` values revealed the tool merged duplicate top-level YAML keys (a strict parser would have dropped one, silently losing a setting) and that a comment mislabelled `TrackpadThreeFingerTapGesture` as "Force Click" when it controls three-finger-tap look up. Config files carry latent inaccuracies; the running system is ground truth.
 
@@ -24,11 +22,21 @@ Lessons captured from past work to inform future development. Updated when mergi
 
 - **Hooks fire on Claude Code events only, not external events**: `Stop`, `PreToolUse`, `SessionStart` etc. There is no "PR pushed" or "PR merged" hook. For external-event automation use GitHub Actions. Don't try to bolt it onto `PreToolUse` matchers against `gh pr merge` — brittle and misses the GitHub UI path.
 
-- **AGENTS.md at repo root, minimal CLAUDE.md imports it**: Cross-tool convention (Cursor, Codex, Aider all read AGENTS.md). A `CLAUDE.md` containing just `@AGENTS.md` is the documented minimal form.
-
 - **`.claude/settings.local.json` must be gitignored**: Claude Code writes per-project permission grants there. Sub-agents probing during review can accumulate dangerous entries like `Bash(rm -rf *)`. Never commit this file.
 
 - **Claude Code auto-updates on launch**: No need for explicit `claude update` in install scripts unless `DISABLE_AUTOUPDATER` is set or auto-update is disabled in settings.
+
+- **Skill frontmatter fails quietly, so quote descriptions**: YAML reads an unquoted ` #` as the start of a comment, so `description: … backfill #counterparts, stamp…` loaded as "…backfill", in the local copy and in the claude.ai account copy uploaded from it. A `SKILL.md` with no frontmatter at all still loads, with its first heading as the description. Neither raises an error; check the skill list in a new session after adding or editing one.
+
+- **claude.ai account skills sync into `~/.claude/skills/synced/`, which here is inside the repo**: A local copy of an account skill therefore loads twice (`task-sweep` and `anthropic-skills:task-sweep`), both competing for the same requests. `synced/<id>/manifest.json` lists what the account provides; check it before adding a skill locally. `synced/` is gitignored because it lands in the working tree.
+
+- **When forking a skill to change a convention, grep every file for the old rule**: The en-NZ fork of economist-style changed honorifics in `DIALECT-CONVENTIONS.md` and the signature file but left "Ms Yellen" in `SKILL.md` step 10 and `TONE.md`, and the paired house-style still prescribed em dashes after economist-style switched to spaced en dashes. Rules are repeated across quick checks, reference files and companion skills.
+
+- **Test a style skill against real writing before trusting it**: Running house-style and economist-style over a published first-person essay found rules that misfire outside their intended register: a one-antithesis cap against an essay built on "AI is not…" headings, bans on "I", "you" and rhetorical questions, and recaps flagged as "mere summary". Both now carry register exemptions; a synthetic sample would not have surfaced them.
+
+- **Project memories only load in sessions started from that directory**: A disk cleanup playbook saved as a memory under `~/Documents/Code` was invisible from `~/.dotfiles`, so a second, newer copy was written there. Anything useful in every project belongs in a skill, which loads everywhere.
+
+- **The web-fetch agent can only quote short excerpts from most sites**: It returned a structural summary of a blog post with a 125-character quoting limit. For a line-level review that needs the full text, download it with `curl` and extract the body locally.
 
 ## Shell patterns
 
@@ -43,6 +51,8 @@ Lessons captured from past work to inform future development. Updated when mergi
 - **jq's `*` merge is append-only**: Removing keys from the source file doesn't remove them from the target. For "repo is source of truth" semantics, use `$repo + (only-transient-keys-from-live)` with an explicit transient allowlist rather than `$repo * $live`.
 
 - **Modern macOS (Sequoia 15+) ships `jq` at `/usr/bin/jq`**: Tests that try to force a grep fallback via `PATH=/usr/bin:/bin` silently hit the real jq and pass vacuously. Use an empty shim directory as PATH to genuinely remove jq from a test environment.
+
+- **`/usr/bin/trash` gives recoverable deletes**: Current macOS ships a `trash` command that moves files to the Bin. Prefer it to `rm -rf` for anything that isn't a cache or isn't tracked in git, such as untracked skill copies or a memory file being retired.
 
 - **bash `${#s}` and `${s:0:N}` count characters, not bytes, in UTF-8 locales**: macOS defaults to UTF-8. A 4-byte emoji is 1 character to bash. Fine for ASCII linter output, but a "max bytes" cap implemented this way is actually a max-chars cap. Name the constant accordingly (`MAX_OUTPUT_CHARS`, not `MAX_OUTPUT_BYTES`).
 
@@ -59,6 +69,8 @@ Lessons captured from past work to inform future development. Updated when mergi
 - **`git diff` and `git diff --staged` don't see untracked files**: A "is anything changed?" guard built from these two commands silently misses brand-new files. Use `git status --porcelain` (everything including untracked) or add `git ls-files --others --exclude-standard` to the check.
 
 - **`git diff HEAD` errors on a brand-new repo**: No HEAD ref exists before the first commit. Scripts that target HEAD-relative diffs need to detect `git rev-parse --verify HEAD` failing and fall back to `git ls-files --cached` for the index contents.
+
+- **Rewrite history without an interactive editor**: `git commit --fixup=<sha>` then `GIT_SEQUENCE_EDITOR=: git rebase -i --autosquash <base>` folds a change into an earlier commit. `GIT_SEQUENCE_EDITOR="sed -i '' 's/^pick <sha>/edit <sha>/'"` stops at a commit to amend it (e.g. drop a file), and `reword` with `GIT_EDITOR="cp msg.txt"` replaces a message. An agent's shell can't drive `rebase -i` by hand, but it can drive these. Push with `--force-with-lease`.
 
 - **`--diff-filter=ACMR` excludes deletions**: When piping changed files into a linter, you don't want deleted paths since they no longer exist on disk. ACMR keeps Added, Copied, Modified, Renamed.
 

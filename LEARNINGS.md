@@ -8,7 +8,7 @@ Lessons captured from past work to inform future development. Updated when mergi
 
 - **Prefer symlinks over copies, except for files the app writes back to**: Symlinked config files stay in sync with the repo automatically. Use `ln -s` instead of `cp` for anything that might change, skills directories included. The exception is a file the app writes to itself: Claude Code writes `feedbackSurveyState` into `~/.claude/settings.json`, so a symlink turns every timestamp update into git churn. Merge those in place with `jq`, preserving an explicit allowlist of transient keys.
 
-- **Updating a script doesn't apply the change**: If you modify an install script (e.g., changing `cp` to `ln -s`), the old state persists until you actually run the script. Don't assume the change is live just because you committed it.
+- **Updating a script doesn't apply the change**: If you modify an install script (e.g., changing `cp` to `ln -s`), the old state persists until you actually run the script. Don't assume the change is live just because you committed it. Same after a `git pull`: merged settings (`enabledPlugins`, marketplaces) only reach `~/.claude/settings.json` on the next `dot` run, so a live/repo diff after pulling is expected, not drift.
 
 - **Timestamp backup filenames beat numbered suffixes**: `file.bak.$(date +%Y%m%d-%H%M%S)` is self-documenting and can't clobber prior backups. Numbered suffixes (`.bak.1`, `.bak.2`) require exists-checking and can race.
 
@@ -50,7 +50,7 @@ Lessons captured from past work to inform future development. Updated when mergi
 
 - **jq's `*` merge is append-only**: Removing keys from the source file doesn't remove them from the target. For "repo is source of truth" semantics, use `$repo + (only-transient-keys-from-live)` with an explicit transient allowlist rather than `$repo * $live`.
 
-- **Modern macOS (Sequoia 15+) ships `jq` at `/usr/bin/jq`**: Tests that try to force a grep fallback via `PATH=/usr/bin:/bin` silently hit the real jq and pass vacuously. Use an empty shim directory as PATH to genuinely remove jq from a test environment.
+- **Modern macOS (Sequoia 15+) ships `jq` at `/usr/bin/jq`**: Tests that try to force a grep fallback via `PATH=/usr/bin:/bin` silently hit the real jq and pass vacuously. Use an empty shim directory as PATH to genuinely remove jq from a test environment. The same applies to stubbing a linter found on PATH (e.g. `swiftlint`): put the stub dir first on a PATH of `/usr/bin:/bin` only, so a Homebrew install in `/opt/homebrew/bin` can't shadow it.
 
 - **`/usr/bin/trash` gives recoverable deletes**: Current macOS ships a `trash` command that moves files to the Bin. Prefer it to `rm -rf` for anything that isn't a cache or isn't tracked in git, such as untracked skill copies or a memory file being retired.
 
@@ -72,6 +72,8 @@ Lessons captured from past work to inform future development. Updated when mergi
 
 - **Rewrite history without an interactive editor**: `git commit --fixup=<sha>` then `GIT_SEQUENCE_EDITOR=: git rebase -i --autosquash <base>` folds a change into an earlier commit. `GIT_SEQUENCE_EDITOR="sed -i '' 's/^pick <sha>/edit <sha>/'"` stops at a commit to amend it (e.g. drop a file), and `reword` with `GIT_EDITOR="cp msg.txt"` replaces a message. An agent's shell can't drive `rebase -i` by hand, but it can drive these. Push with `--force-with-lease`.
 
+- **A conflicted `git stash pop` stages the clean files and keeps the stash**: After resolving, the working tree no longer matches the pre-stash state (everything is staged), and the stash entry is still there. `git reset` to unstage, then `git stash drop` once the changes are confirmed reapplied. Check upstream first: here the conflict was main having added the same `.gitignore` line.
+
 - **`--diff-filter=ACMR` excludes deletions**: When piping changed files into a linter, you don't want deleted paths since they no longer exist on disk. ACMR keeps Added, Copied, Modified, Renamed.
 
 ## Hook design
@@ -84,11 +86,21 @@ Lessons captured from past work to inform future development. Updated when mergi
 
 - **Match guard contracts to helper contracts**: If a new helper claims "staged + unstaged + untracked", any guard that short-circuits before calling it needs the same definition. Otherwise the guard's narrower view fires first and the helper never runs. Real case: a "nothing changed" early-exit using only `git diff` checks skipped untracked-only changes, even though the new scoping helper included them.
 
+- **SwiftLint lints excluded files when they're named on the command line**: `.swiftlint.yml` excludes only apply to discovered files unless you pass `--force-exclude` (RuboCop's equivalent is `--force-exclusion`). When every named file is excluded, SwiftLint exits 1 with "No lintable files found", which the hook must treat as a pass.
+
+- **Tolerate a known failure by exact exit code plus message, never "non-zero plus substring"**: The first cut of the SwiftLint pass was `rc != 0 && output contains "No lintable files found"`, which would let a real violation (exit 2) through if its text contained the phrase. Narrowed to `rc == 1`, with negative tests for exit 1 without the phrase and exit 2 with it. Caught by the `code-reviewer` sub-agent, not by the original tests.
+
+- **Prove a new hook test catches the regression by running it against main's hook**: `smoke-test-hook.sh` honours `HOOK=`, so `git show main:apps/claude/hooks/verify.sh > "$TMPDIR/old.sh"; chmod +x "$TMPDIR/old.sh"; HOOK="$TMPDIR/old.sh" ~/.claude/hooks/smoke-test-hook.sh` shows which new checks fail without the change. A test that passes on both sides tests nothing.
+
 ## GitHub CLI
 
 - **Resolve PR comment threads via GraphQL**: Use `gh api graphql` with the `resolveReviewThread` mutation to programmatically mark review threads as resolved. Requires the thread's node ID from the `reviewThreads` query.
 
 - **`gh api graphql -f key=value` defines GraphQL variables**: Any `-f` pair alongside `-f query=...` becomes a variable in the mutation. Useful for bodies containing quotes/colons that are awkward to inline: `gh api graphql -f threadId=PRRT_... -f body='...' -f query='mutation($threadId: ID!, $body: String!) { ... }'`.
+
+- **`gh issue view <n> --comments` can print nothing and exit 0**: It did for #6 in this repo, cause not established. Fall back to `gh api repos/<owner>/<repo>/issues/<n>` and `.../comments`, which returned the issue fine.
+
+- **Put `Closes #n` in the PR body when a PR resolves an issue**: #7 fixed everything #6 asked for but didn't reference it, so #6 sat open for seven months until someone audited it by hand. The keyword closes the issue on merge and records the link.
 
 ## Code review
 
